@@ -1,6 +1,5 @@
 package com.joyfarm.farmstival.member.jwt;
 
-import com.joyfarm.farmstival.member.MemberInfo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -34,11 +33,13 @@ public class TokenProvider {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(authenticationToken);
-        if(authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails){
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
             //로그인 성공시(유효한 사용자) -> JWT 토큰 "발급"
             long now = (new Date()).getTime(); // 현재 시간
             Date validity = new Date(now + properties.getValidSeconds() * 1000);
             //현재 발급받은 시간에서 한 시간동안 유효
+
+            System.out.println("여기?" + properties.getValidSeconds());
 
             return Jwts.builder()
                     .setSubject(authentication.getName()) // 사용자 email(인증 완료)
