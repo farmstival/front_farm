@@ -3,6 +3,8 @@ package com.joyfarm.farmstival.member.controllers;
 import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.global.exceptions.BadRequestException;
 import com.joyfarm.farmstival.global.rests.JSONData;
+import com.joyfarm.farmstival.member.MemberInfo;
+import com.joyfarm.farmstival.member.entities.Member;
 import com.joyfarm.farmstival.member.jwt.TokenProvider;
 import com.joyfarm.farmstival.member.validators.JoinValidator;
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,11 +42,6 @@ public class MemberController {
     }
 
     /* 로그인 절차 완료 시 토큰(=교환권) 발급 */
-    @GetMapping("/token")
-    public String token(){
-
-        return "token";
-    }
     @PostMapping("/token")
     public JSONData token(@RequestBody @Valid RequestLogin form, Errors errors) {
 
@@ -55,6 +53,14 @@ public class MemberController {
 
         return new JSONData(token);
     }
+
+    @GetMapping
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+        Member member = memberInfo.getMember();
+
+        return new JSONData(member);
+    }
+
 
     @GetMapping("/test1")
     public void memberOnly() {

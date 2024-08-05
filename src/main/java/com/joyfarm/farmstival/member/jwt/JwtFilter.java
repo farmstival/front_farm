@@ -48,12 +48,14 @@ public class JwtFilter extends GenericFilterBean {
      * @param request
      * @return
      */
-    private String getToken(ServletRequest request){
+    private String getToken(ServletRequest request) {
         HttpServletRequest req = (HttpServletRequest) request;
         String bearerToken = req.getHeader("Authorization");
-        if(StringUtils.hasText(bearerToken) && bearerToken.toUpperCase().startsWith("BEARER ")){
+        if (StringUtils.hasText(bearerToken)
+                && bearerToken.toUpperCase().startsWith("BEARER ")) {
             return bearerToken.substring(7).trim();
         }
+
         return null;
     }
 }
