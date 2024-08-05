@@ -42,7 +42,7 @@ public class CommonControllerAdvice {
             loginErrorCode = "BadCredentials.Login";
         } else if (e instanceof DisabledException) { // 탈퇴한 회원
             loginErrorCode = "Disabled.Login";
-        } else if (e instanceof CredentialsExpiredException) { // 비밀번호 유효기간 만료
+        } else if (e instanceof CredentialsExpiredException) { // 비밀번호 유효기간 만료.
             loginErrorCode = "CredentialsExpired.Login";
         } else if (e instanceof AccountExpiredException) { // 사용자 계정 유효기간 만료
             loginErrorCode = "AccountExpired.Login";
