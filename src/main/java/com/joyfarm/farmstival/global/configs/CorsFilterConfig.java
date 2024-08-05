@@ -23,6 +23,8 @@ public class CorsFilterConfig {
             config.addAllowedHeader("*"); // 모든 요청 헤더를 허용하겠다.
             config.addAllowedOrigin(allowedOrigins); // 개발할 때는 전체를 다 허용
 
+            source.registerCorsConfiguration("/**", config);
+
            return new CorsFilter(source);
         }
     }
