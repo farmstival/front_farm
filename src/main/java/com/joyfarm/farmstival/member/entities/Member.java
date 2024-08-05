@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.member.entities;
 
+import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
