@@ -25,28 +25,34 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(c -> c.disable()) // 토큰 무력화
+        http.csrf(c -> c.disable()) // Cors 정책을 바꾸는 설정
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                // corsFilter를 통해 Cors 정책을 바꾼다. UsernamePasswordAuthenticationFilter.class가 하기 전에!
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                // jwtFilter를 통해 로그인 유지 처리를 한다. UsernamePasswordAuthenticationFilter.class가 하기 전에!
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(h -> {h.authenticationEntryPoint((req, res, e) -> res.sendError(HttpStatus.UNAUTHORIZED.value()));
+                // 세션쪽 기술을 활용하지 않고 로그인을 유지할 것이므로 STATELESS로 무상태 처리를 한다.
+                // STATELESS가 되면 세션을 사용하지 않게 된다.
+                .exceptionHandling(h -> {
+                    h.authenticationEntryPoint((req, res, e) -> res.sendError(HttpStatus.UNAUTHORIZED.value()));
+                    // 회원가입이랑 토큰 발급 말고는 모두 인증이 필요하게 만들 것이다.
                     h.accessDeniedHandler((req, res, e) -> res.sendError(HttpStatus.UNAUTHORIZED.value()));
                 })
                 .authorizeHttpRequests(c -> {
                     c.requestMatchers(
-                            "/account",
-                            "/account/token"
-                    ).permitAll() // 회원가입, 로그인(토큰)은 모든 접근 가능
-                            .anyRequest().authenticated(); // 그 외에는 인증 필요
+                                    "/account",
+                                    "/account/token"
+                            ).permitAll() // 회원가입, 로그인(토큰)은 모든 접근 가능
+                            .anyRequest().authenticated(); // 그외에는 인증 필요
                 });
 
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

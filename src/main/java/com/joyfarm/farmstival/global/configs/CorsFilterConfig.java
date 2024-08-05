@@ -13,15 +13,11 @@ public class CorsFilterConfig {
     @Value("${cors.allow.origins}")
     private String allowedOrigins;
 
-    // Cors 관련 헤더 - 응답 헤더 추가
     @Bean
     public CorsFilter corsFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedMethod("*"); // 모든 요청 메서드 허용
-        config.addAllowedHeader("*"); // 모든 요청 헤더 허용
-        config.addAllowedOrigin("allowedOrigins");
 
         return new CorsFilter(source);
     }

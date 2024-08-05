@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class RequestLogin {
+
     @NotBlank
     private String email;
 

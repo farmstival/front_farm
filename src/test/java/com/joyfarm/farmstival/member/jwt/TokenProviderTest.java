@@ -11,7 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("Test")
 public class TokenProviderTest {
     @Autowired
     private TokenProvider provider;
@@ -20,7 +20,6 @@ public class TokenProviderTest {
     private MemberSaveService saveService;
 
     private RequestJoin form;
-
     @BeforeEach
     void init() {
         form = new RequestJoin();
@@ -30,12 +29,13 @@ public class TokenProviderTest {
         form.setMobile("010-1000-1000");
         form.setUserName("사용자01");
         form.setAgree(true);
+
         saveService.save(form);
     }
 
     @Test
     @DisplayName("토큰 발급 테스트")
-    @WithMockUser(username="user01@test.org", password="_aA123456", authorities = "USER")
+    @WithMockUser(username = "user01@test.org", password = "_aA123456", authorities = "USER")
     void createTokenTest() {
         String token = provider.createToken("user01@test.org", "_aA123456");
         System.out.println(token);

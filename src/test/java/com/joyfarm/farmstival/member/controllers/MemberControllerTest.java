@@ -16,15 +16,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class
-
-MemberControllerTest {
+public class MemberControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,12 +45,13 @@ MemberControllerTest {
         form.setMobile("010-1000-1000");
         form.setUserName("사용자01");
         form.setAgree(true);
+
         saveService.save(form);
     }
 
-    @Test
     @DisplayName("회원 가입 테스트")
-    void joinTest() throws Exception {
+    @Test
+    void joinTest() throws Exception{
         RequestJoin form = new RequestJoin();
         //form.setEmail("user01@test.org");
         //form.setPassword("_aA123456");
@@ -60,7 +60,7 @@ MemberControllerTest {
         //form.setMobile("010-1000-1000");
         //form.setAgree(true);
 
-        String params = om.writeValueAsString(form);
+        String params = om.writeValueAsString(form); //JSON 문자열로 변환!
 
         mockMvc.perform(post("/account")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +71,7 @@ MemberControllerTest {
 
     @Test
     @DisplayName("토큰 발급 테스트")
-    void tokenTest() throws Exception {
+    void tokenTest() throws Exception{
         RequestLogin loginForm = new RequestLogin();
         loginForm.setEmail(form.getEmail());
         loginForm.setPassword(form.getPassword());
@@ -80,18 +80,17 @@ MemberControllerTest {
 
         String body = mockMvc.perform(post("/account/token")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(params)
-                )
+                        .content(params))
                 .andDo(print())
-                .andReturn().getResponse()
-                .getContentAsString(StandardCharsets.UTF_8);
+                        .andReturn().getResponse()
+                        .getContentAsString(StandardCharsets.UTF_8);
+                 // 바디 데이터로 가지고 온다.
 
-        JSONData data = om.readValue(body, JSONData.class);
+        JSONData data = om.readValue(body, JSONData.class); // JSON 데이터로 바꾸기
         String token = (String)data.getData();
 
         mockMvc.perform(get("/account/test1")
-                        .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer" + token))
                 .andDo(print());
-
     }
 }
