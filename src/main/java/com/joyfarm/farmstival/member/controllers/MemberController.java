@@ -29,7 +29,6 @@ public class MemberController {
 
     }
 
-
     /* 회원 가입 시 응답 코드 201 */
     @PostMapping // /account 쪽에 Post 방식으로 접근하면 -> 회원가입
     public ResponseEntity join(@RequestBody @Valid RequestJoin form, Errors errors){
