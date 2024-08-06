@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,25 +37,23 @@ public class CommonControllerAdvice {
             if (errorMessages != null) message = errorMessages;
         }
 
-        String errorCode = null;
+        String loginErrorCode = null;
         if (e instanceof BadCredentialsException) { // 아이디 또는 비밀번호가 일치하지 않는 경우
-            errorCode = "BadCredentials.Login";
+            loginErrorCode = "BadCredentials.Login";
         } else if (e instanceof DisabledException) { // 탈퇴한 회원
-            errorCode = "Disabled.Login";
+            loginErrorCode = "Disabled.Login";
         } else if (e instanceof CredentialsExpiredException) { // 비밀번호 유효기간 만료
-            errorCode = "CredentialsExpired.Login";
+            loginErrorCode = "CredentialsExpired.Login";
         } else if (e instanceof AccountExpiredException) { // 사용자 계정 유효기간 만료
-            errorCode = "AccountExpired.Login";
+            loginErrorCode = "AccountExpired.Login";
         } else if (e instanceof LockedException) { // 사용자 계정이 잠겨있는 경우
-            errorCode = "Locked.Login";
-        } else if (e instanceof AuthenticationException) {
-            errorCode = "Fail.Login";
-        } else if (e instanceof AuthorizationDeniedException) {
-            errorCode = "UnAuthorized";
+            loginErrorCode = "Locked.Login";
+        } else if (e instanceof AuthenticationException){
+            loginErrorCode = "Fail.Login";
         }
 
-        if (StringUtils.hasText(errorCode)) {
-            message = utils.getMessage(errorCode);
+        if (StringUtils.hasText(loginErrorCode)) {
+            message = utils.getMessage(loginErrorCode);
             status = HttpStatus.UNAUTHORIZED;
         }
         // 코드에 따라 메세지가 다르게 추가된다.
