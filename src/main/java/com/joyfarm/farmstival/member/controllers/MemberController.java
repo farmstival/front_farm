@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final JoinValidator joinValidator;
+    private final MemberSaveService saveService;
     private final Utils utils;
     private final TokenProvider tokenProvider;
 
@@ -34,6 +35,8 @@ public class MemberController {
         if (errors.hasErrors()){
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
+
+        saveService.save(form);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
