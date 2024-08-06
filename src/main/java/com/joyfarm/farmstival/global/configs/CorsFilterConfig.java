@@ -14,17 +14,21 @@ public class CorsFilterConfig {
     private String allowedOrigins;
 
     // Cors 관련 헤더 -> 응답 헤더에 추가한다. (서버가 자원을 줄지 말지를 알려주는 것이므로)
-        @Bean
-        public CorsFilter corsFilter() {
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-            CorsConfiguration config = new CorsConfiguration();
-            config.addAllowedMethod("*"); // 모든 요청 메서드를 허용하겠다.
-            config.addAllowedHeader("*"); // 모든 요청 헤더를 허용하겠다.
-            config.addAllowedOrigin(allowedOrigins); // 개발할 때는 전체를 다 허용
-
-            source.registerCorsConfiguration("/**", config);
-
-           return new CorsFilter(source);
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedMethod("*"); // 모든 요청 메서드 허용
+        config.addAllowedHeader("*"); // 모든 요청 헤더 허용
+        if (!allowedOrigins.equals("*")) {
+            config.setAllowCredentials(true);
         }
+        config.addAllowedOrigin(allowedOrigins); //개발할때는 전체를 다 허용
+        config.addExposedHeader("*");
+
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
+    }
     }
