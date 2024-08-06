@@ -23,7 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class MemberControllerTest {
+public class
+
+MemberControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,13 +47,12 @@ public class MemberControllerTest {
         form.setMobile("010-1000-1000");
         form.setUserName("사용자01");
         form.setAgree(true);
-
         saveService.save(form);
     }
 
-    @DisplayName("회원 가입 테스트")
     @Test
-    void joinTest() throws Exception{
+    @DisplayName("회원 가입 테스트")
+    void joinTest() throws Exception {
         RequestJoin form = new RequestJoin();
         //form.setEmail("user01@test.org");
         //form.setPassword("_aA123456");
@@ -60,7 +61,7 @@ public class MemberControllerTest {
         //form.setMobile("010-1000-1000");
         //form.setAgree(true);
 
-        String params = om.writeValueAsString(form); //JSON 문자열로 변환!
+        String params = om.writeValueAsString(form); // JSON 문자열로 변환!
 
         mockMvc.perform(post("/account")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -80,17 +81,18 @@ public class MemberControllerTest {
 
         String body = mockMvc.perform(post("/account/token")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(params))
+                        .content(params)
+                )
                 .andDo(print())
-                        .andReturn().getResponse()
-                        .getContentAsString(StandardCharsets.UTF_8);
+                .andReturn().getResponse()
+                .getContentAsString(StandardCharsets.UTF_8);
                  // 바디 데이터로 가지고 온다.
 
         JSONData data = om.readValue(body, JSONData.class); // JSON 데이터로 바꾸기
         String token = (String)data.getData();
 
         mockMvc.perform(get("/account/test2")
-                        .header("Authorization", "Bearer" + token))
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
     }
 }

@@ -49,10 +49,10 @@ public class CommonControllerAdvice {
             errorCode = "AccountExpired.Login";
         } else if (e instanceof LockedException) { // 사용자 계정이 잠겨있는 경우
             errorCode = "Locked.Login";
-        } else if (e instanceof AuthenticationException){
+        } else if (e instanceof AuthenticationException) {
             errorCode = "Fail.Login";
         } else if (e instanceof AuthorizationDeniedException) {
-            errorCode = "Unauthorized";
+            errorCode = "UnAuthorized";
         }
 
         if (StringUtils.hasText(errorCode)) {

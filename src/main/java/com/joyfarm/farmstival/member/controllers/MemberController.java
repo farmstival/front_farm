@@ -24,6 +24,12 @@ public class MemberController {
     private final Utils utils;
     private final TokenProvider tokenProvider;
 
+    @GetMapping
+    public void test() {
+
+    }
+
+
     /* 회원 가입 시 응답 코드 201 */
     @PostMapping // /account 쪽에 Post 방식으로 접근하면 -> 회원가입
     public ResponseEntity join(@RequestBody @Valid RequestJoin form, Errors errors){
@@ -49,15 +55,15 @@ public class MemberController {
         
         return new JSONData(token); // 이상이 없으면 JSONData로 토큰 발급
     }
-    
+
     @GetMapping("/test1")
     public void memberOnly() {
-        log.info("회원 전용");
+        log.info("회원전용!");
     }
-    
+
     @GetMapping("/test2")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void adminOnly() {
-        log.info("관리자 전용");
+        log.info("관리자 전용!");
     }
 }
