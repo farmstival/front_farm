@@ -4,6 +4,7 @@ import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.global.exceptions.BadRequestException;
 import com.joyfarm.farmstival.global.rests.JSONData;
 import com.joyfarm.farmstival.member.jwt.TokenProvider;
+import com.joyfarm.farmstival.member.services.MemberSaveService;
 import com.joyfarm.farmstival.member.validators.JoinValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final JoinValidator joinValidator;
+    private final MemberSaveService saveService;
     private final Utils utils;
     private final TokenProvider tokenProvider;
 
@@ -28,7 +30,6 @@ public class MemberController {
     public void test() {
 
     }
-
 
     /* 회원 가입 시 응답 코드 201 */
     @PostMapping // /account 쪽에 Post 방식으로 접근하면 -> 회원가입
@@ -40,6 +41,8 @@ public class MemberController {
         if (errors.hasErrors()){
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
+
+        saveService.save(form);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
