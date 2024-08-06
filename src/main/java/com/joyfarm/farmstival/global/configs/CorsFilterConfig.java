@@ -19,10 +19,16 @@ public class CorsFilterConfig {
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
             CorsConfiguration config = new CorsConfiguration();
-            config.addAllowedMethod("*"); // 모든 요청 메서드를 허용하겠다.
-            config.addAllowedHeader("*"); // 모든 요청 헤더를 허용하겠다.
-            config.addAllowedOrigin(allowedOrigins); // 개발할 때는 전체를 다 허용
+            config.addAllowedMethod("*"); // 모든 요청 메서드 허용
+            config.addAllowedHeader("*"); // 모든 요청 헤더 허용
+            if (!allowedOrigins.equals("*")) {
+                config.setAllowCredentials(true);
+            }
+            config.addAllowedOrigin(allowedOrigins);
+            config.addExposedHeader("*");
 
-           return new CorsFilter(source);
+            source.registerCorsConfiguration("/**", config);
+
+            return new CorsFilter(source);
         }
-    }
+}

@@ -33,7 +33,7 @@ public class MemberSaveService {
         String hash = passwordEncoder.encode(form.getPassword()); // BCrypt 해시화
         member.setPassword(hash);
 
-        save(member, List.of(Authority.USER));
+        save(member, List.of(Authority.ADMIN));
     }
 
 
