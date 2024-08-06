@@ -89,8 +89,8 @@ public class MemberControllerTest {
         JSONData data = om.readValue(body, JSONData.class); // JSON 데이터로 바꾸기
         String token = (String)data.getData();
 
-        mockMvc.perform(get("/account/test1")
-                        .header("Authorization", "Bearer" + token))
+        mockMvc.perform(get("/account/test2")
+                        .header("Authorization", "Bearer " + token))
                 .andDo(print());
     }
 }
