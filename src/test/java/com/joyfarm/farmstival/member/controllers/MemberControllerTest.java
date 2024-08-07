@@ -59,7 +59,7 @@ public class MemberControllerTest {
         //form.setMobile("010-1000-1000");
         //form.setAgree(true);
 
-        String params = om.writeValueAsString(form);
+        String params = om.writeValueAsString(form); // JSON 문자열로 변환!
 
         mockMvc.perform(post("/account")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("토큰 발급 테스트")
-    void tokenTest() throws Exception {
+    void tokenTest() throws Exception{
         RequestLogin loginForm = new RequestLogin();
         loginForm.setEmail(form.getEmail());
         loginForm.setPassword(form.getPassword());
@@ -84,13 +84,13 @@ public class MemberControllerTest {
                 .andDo(print())
                 .andReturn().getResponse()
                 .getContentAsString(StandardCharsets.UTF_8);
+                 // 바디 데이터로 가지고 온다.
 
-        JSONData data = om.readValue(body, JSONData.class);
+        JSONData data = om.readValue(body, JSONData.class); // JSON 데이터로 바꾸기
         String token = (String)data.getData();
 
         mockMvc.perform(get("/account/test2")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print());
-
     }
 }
