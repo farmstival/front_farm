@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +29,14 @@ public class MemberController {
     private final Utils utils;
     private final TokenProvider tokenProvider;
 
-    //로그인 한 회원 정보 조회
+    //로그인한 회원 정보 조회
     @GetMapping
-    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo){
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
         Member member = memberInfo.getMember();
 
         return new JSONData(member);
     }
 
-    //회원가입
     /* 회원 가입 시 응답 코드 201 */
     @PostMapping // /account 쪽에 Post 방식으로 접근하면 -> 회원가입
     public ResponseEntity join(@RequestBody @Valid RequestJoin form, Errors errors){
@@ -65,4 +65,14 @@ public class MemberController {
         return new JSONData(token); // 이상이 없으면 JSONData로 토큰 발급
     }
 
+    @GetMapping("/test1")
+    public void memberOnly() {
+        log.info("회원전용!");
+    }
+
+    @GetMapping("/test2")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public void adminOnly() {
+        log.info("관리자 전용!");
+    }
 }
