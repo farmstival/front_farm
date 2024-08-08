@@ -3,6 +3,8 @@ package com.joyfarm.farmstival.member.controllers;
 import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.global.exceptions.BadRequestException;
 import com.joyfarm.farmstival.global.rests.JSONData;
+import com.joyfarm.farmstival.member.MemberInfo;
+import com.joyfarm.farmstival.member.entities.Member;
 import com.joyfarm.farmstival.member.jwt.TokenProvider;
 import com.joyfarm.farmstival.member.services.MemberSaveService;
 import com.joyfarm.farmstival.member.validators.JoinValidator;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +26,15 @@ public class MemberController {
 
     private final JoinValidator joinValidator;
     private final MemberSaveService saveService;
-    private final Utils utils;
     private final TokenProvider tokenProvider;
+    private final Utils utils;
 
+    /* 로그인 한 회원 정보 조회 */
     @GetMapping
-    public void test() {
-
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+        Member member = memberInfo.getMember();
+        
+        return new JSONData(member);
     }
 
     /* 회원 가입 시 응답 코드 201 */
