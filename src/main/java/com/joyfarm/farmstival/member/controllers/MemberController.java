@@ -26,14 +26,14 @@ public class MemberController {
 
     private final JoinValidator joinValidator;
     private final MemberSaveService saveService;
-    private final TokenProvider tokenProvider;
     private final Utils utils;
+    private final TokenProvider tokenProvider;
 
-    /* 로그인 한 회원 정보 조회 */
+    //로그인한 회원 정보 조회
     @GetMapping
     public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
         Member member = memberInfo.getMember();
-        
+
         return new JSONData(member);
     }
 
