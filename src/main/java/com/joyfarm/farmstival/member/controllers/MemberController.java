@@ -29,8 +29,9 @@ public class MemberController {
     private final Utils utils;
     private final TokenProvider tokenProvider;
 
-    //로그인한 회원 정보 조회
+    /* 로그인한 회원 정보 조회 */
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
         Member member = memberInfo.getMember();
 
@@ -45,7 +46,7 @@ public class MemberController {
         joinValidator.validate(form, errors);
 
         if (errors.hasErrors()){
-            throw new BadRequestException(utils.getErrorMessages(errors));
+            throw new BadRequestException(utils.getErrorMessages(errors)); //검증 실패시 400 응답코드, 검증 실패시 JSON형태로 응답 메시지 반환
         }
 
         saveService.save(form);
