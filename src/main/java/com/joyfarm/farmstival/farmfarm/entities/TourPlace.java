@@ -19,7 +19,7 @@ public class TourPlace extends BaseEntity {
     private Long seq;
 
     @Column(length=150, nullable = false)
-    private String title; // 여행지명
+    private String title; // 여행지 명
     private Double latitude; // 위도
     private Double longitude; // 경도
 
@@ -43,7 +43,7 @@ public class TourPlace extends BaseEntity {
     private String photoUrl; // 사진 파일 주소
 
     @Column(length=40)
-    private String period; // 행사 기간
+    private String period; // 여행 기간
 
     private Integer tourDays; // 여행일
 
