@@ -31,6 +31,7 @@ public class MemberController {
 
     //로그인한 회원 정보 조회
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
         Member member = memberInfo.getMember();
 
