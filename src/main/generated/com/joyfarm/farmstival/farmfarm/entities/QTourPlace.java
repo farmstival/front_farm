@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -23,6 +24,8 @@ public class QTourPlace extends EntityPathBase<TourPlace> {
 
     public final StringPath address = createString("address");
 
+    public final StringPath course = createString("course");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -38,9 +41,17 @@ public class QTourPlace extends EntityPathBase<TourPlace> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
+    public final StringPath period = createString("period");
+
     public final StringPath photoUrl = createString("photoUrl");
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
+
+    public final StringPath sido = createString("sido");
+
+    public final StringPath sigungu = createString("sigungu");
+
+    public final ListPath<TourPlaceTag, QTourPlaceTag> tags = this.<TourPlaceTag, QTourPlaceTag>createList("tags", TourPlaceTag.class, QTourPlaceTag.class, PathInits.DIRECT2);
 
     public final StringPath tel = createString("tel");
 
