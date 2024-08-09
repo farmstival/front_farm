@@ -14,26 +14,37 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 스프링 시큐리티에서 유저의 정보를 불리오기 위해 구현
+ */
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
+    /* 회원 정보가 필요할때마다 호출되는 메서드 */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {//유저의 정보를 불러와서 UserDetails로 리턴
 
         Member member = memberRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(() -> new UsernameNotFoundException(username)); //회원 없을 경우 예외 발생
 
+        /*
+        MemberInfo쪽에 getAuthorities()메서드를 통해서 사용자 권한 조회,
+        권한이 null이거나 비어있을 때 대체 할 기본권한 -> USER, null이 아닌 경우 기존 권한 그대로 반환
+         */
         List<Authorities> tmp = member.getAuthorities();
         if(tmp == null || tmp.isEmpty()){
             tmp = List.of(Authorities.builder().member(member).authority(Authority.USER).build());
         }
 
+        /*
+        tmp에서 가져온 Authorities 객체 리스트를 Spring Security가 이해할 수 있는 SimpleGrantedAuthority 객체 리스트로 변환하는 가공 단계가 필요하다.
+         */
         List<SimpleGrantedAuthority> authorities = tmp.stream()
                 .map(a -> new SimpleGrantedAuthority(a.getAuthority().name()))
-                .toList();
+                .toList();//Authority enum의 name 메서드를 호출하여 문자열로 변환해야한다.(authority는 enum상수로 되어있기 때문!)
 
         return MemberInfo.builder()
                 .email(member.getEmail())
