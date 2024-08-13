@@ -17,14 +17,16 @@ public class BoardData extends BaseEntity { //게시글 데이터
     @Id @GeneratedValue
     private Long seq; //게시글 자동 증감 번호
 
-    @Column(length = 65, nullable = false)
+    @Column(length = 65, nullable = false, updatable = false)
     private String gid; //이미지와 파일은 여러개가 들어올 수 있기 때문에 그룹으로 묶어줘야함
 
     @JoinColumn(name = "bid") //게시판 별 게시글 구분 명
     @ManyToOne(fetch = FetchType.LAZY)
+    @Column(updatable = false)
     private Board board;
     //게시판 아이디(bid) 관계매핑을 통해 관련시켜 두면 특정 게시판엔 특정 게시글이 올것임!, 게시글쪽이 many
 
+    @Column(updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
     //회원쪽 아이디(seq) 한명의 회원이 여러개의 게시글 작성 가능, 게시글쪽이 many
@@ -48,8 +50,9 @@ public class BoardData extends BaseEntity { //게시글 데이터
     private int viewCount; //조회수
     private boolean editorView; //에디터 사용여부에 따라 다르게 출력
 
-    @Column(length = 20)
+    @Column(length = 20, updatable = false)
     private String ip; //사용자 ip 주소
+    @Column(updatable = false)
     private String ua; //사용자 User-Agent
 
     private Long num1; //정수 추가 필드1
