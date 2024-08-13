@@ -23,6 +23,12 @@ public class QFestival extends EntityPathBase<Festival> {
 
     public final StringPath address = createString("address");
 
+    public final StringPath cat1 = createString("cat1");
+
+    public final StringPath cat2 = createString("cat2");
+
+    public final StringPath cat3 = createString("cat3");
+
     public final StringPath content = createString("content");
 
     //inherited
@@ -47,6 +53,10 @@ public class QFestival extends EntityPathBase<Festival> {
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final StringPath pageLink = createString("pageLink");
+
+    public final StringPath photoUrl1 = createString("photoUrl1");
+
+    public final StringPath photoUrl2 = createString("photoUrl2");
 
     public final NumberPath<Long> seq = createNumber("seq", Long.class);
 
