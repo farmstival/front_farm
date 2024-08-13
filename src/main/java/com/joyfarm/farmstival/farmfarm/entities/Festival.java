@@ -16,20 +16,31 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Festival extends BaseEntity {
     @Id
-    @GeneratedValue
-    private Long seq;
+    private Long seq; // 기본키 - contentId
 
     @Column(length=150, nullable = false)
     private String title; // 축제명
 
+    @Column(length=20)
+    private String cat1; // 분류명
+
+    @Column(length=20)
+    private String cat2; // 분류명
+
+    @Column(length=20)
+    private String cat3; // 분류명
+
     private Double latitude; // 위도
     private Double longitude; // 경도
 
-    @Column(length=50)
+    @Column(length=200)
     private String tel; // 연락처
 
     @Column(length=150)
     private String address; // 주소
+
+    private String photoUrl1; // 사진
+    private String photoUrl2;
 
     @Column(length=150)
     private String location; // 개최 장소
