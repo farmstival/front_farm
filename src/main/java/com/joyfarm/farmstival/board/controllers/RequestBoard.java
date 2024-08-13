@@ -6,36 +6,34 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class RequestBoard { // 커맨드 객체
-    private Long seq; // 글 번호 - 글 수정시 필요
-    private String mode; // write : 글 작성, update : 글 수정
+public class RequestBoard { //커맨드객체
 
+    private Long seq; //글 번호 - 글 수정시 필요
+
+    private String mode = "write"; // write: 글 작성, update: 글 수정 / 작성, 수정 여부 알 수 있는 값
     @NotBlank
-    private String bid; // 게시판 ID
-
-    private String gid = UUID.randomUUID().toString();
-
-    private boolean notice; // 공지글 여부
-
-    private String category;
-
+    private String bid; //게시판 ID
+    private String gid = UUID.randomUUID().toString(); //파일, 이미지 업로드 시 필요, 중복이 되지 않는 unique 아이디로 기본값 대입
+    private boolean notice; //공지글 여부 - 일반 회원 작성x 관리자만 쓰도록
+    private String category; //분류
     @NotBlank
-    private String poster; // 작성자
-
-    private String guestPw; // 비회원 비밀번호(수정, 삭제)
+    private String poster; //작성자
     @NotBlank
-    private String subject;
+    private String subject; //제목
     @NotBlank
-    private String content;
+    private String content; //내용
 
-    private Long num1;
-    private Long num2;
-    private Long num3;
+    private String guestPw; //비회원 비밀번호(수정, 삭제) - 선별적 필수항목
 
-    private String text1;
+    private Long num1; //추가 필드1
+    private Long num2; //추가 필드2
+    private Long num3; //추가 필드3
+
+    private String text1; //추가 필드 한줄 텍스트
     private String text2;
     private String text3;
 
-    private String longText1;
+    private String longText1; //추가 필드 여러줄
     private String longText2;
+    private String longText3;
 }

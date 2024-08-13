@@ -12,64 +12,60 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @NoArgsConstructor @AllArgsConstructor
-@Table(indexes = @Index(name="idx_board_data", columnList = "notice DESC, createdAt DESC"))
-public class BoardData extends BaseEntity {
+@Table(indexes = @Index(name = "idx_board_data", columnList = "notice DESC, createdAt DESC"))
+public class BoardData extends BaseEntity { //게시글 데이터
     @Id @GeneratedValue
-    private Long seq;
+    private Long seq; //게시글 자동 증감 번호
 
-    @Column(length=65, nullable=false, updatable = false)
-    private String gid; // 이미지나 파일을 찾기위한 용도, 처음에 글 추가할 때만 들어가야함
+    @Column(length = 65, nullable = false, updatable = false)
+    private String gid; //이미지와 파일은 여러개가 들어올 수 있기 때문에 그룹으로 묶어줘야함
 
-    @JoinColumn(name="bid")
-    @Column(updatable = false)
+    @JoinColumn(name = "bid") //게시판 별 게시글 구분 명
     @ManyToOne(fetch = FetchType.LAZY)
-    private Board board; // 추가할때만 들어가고 수정할 땐 바뀌면 안됨.
+    private Board board;
+    //게시판 아이디(bid) 관계매핑을 통해 관련시켜 두면 특정 게시판엔 특정 게시글이 올것임!, 게시글쪽이 many
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(updatable = false)
-    private Member member; // 추가할때만 들어가고 수정할 땐 바뀌면 안됨.
+    private Member member;
+    //회원쪽 아이디(seq) 한명의 회원이 여러개의 게시글 작성 가능, 게시글쪽이 many
 
     @Column(length = 65)
-    private String guestPw; // 비회원 비밀번호(수정, 삭제)
+    private String guestPw; //비회원 비밀번호(글 수정, 삭제)
 
-    @Column(length=60)
-    private String category; // 게시글 분류
+    @Column(length = 60)
+    private String category; //게시글 분류
 
-    private boolean notice; // 공지글 여부
+    private boolean notice; //공지글 여부
 
     @Column(length = 40, nullable = false)
     private String poster; // 작성자
-
     @Column(nullable = false)
     private String subject; // 제목
-
     @Lob
     @Column(nullable = false)
     private String content; // 내용
 
-    private int viewCount; // 조회수
-    private boolean editorView; // 에디터를 사용해서 글 작성했는지 여부
+    private int viewCount; //조회수
+    private boolean editorView; //에디터 사용여부에 따라 다르게 출력
 
-    @Column(length=20, updatable = false)
-    private String ip; // IP 주소 , 수정시에 바뀌면 안된다.
+    @Column(length = 20, updatable = false)
+    private String ip; //사용자 ip 주소
     @Column(updatable = false)
-    private String ua; // User-Agent
+    private String ua; //사용자 User-Agent
 
-    private Long num1; // 정수 추가 필드1 - 필요한 이유는 상품 번호 같은게 있으면 다양하게 사용할 수 있나봄
-    private Long num2; // 정수 추가 필드2
-    private Long num3; // 정수 추가 필드3
+    private Long num1; //정수 추가 필드1
+    private Long num2; //정수 추가 필드2
+    private Long num3; //정수 추가 필드3
 
-    @Column(length=100)
-    private String text1; // 한줄 텍스트 추가 필드1
-    @Column(length=100)
-    private String text2; // 한줄 텍스트 추가 필드2
-    @Column(length=100)
-    private String text3; // 한줄 텍스트 추가 필드3
+    @Column(length = 100)
+    private String text1; //한 줄 텍스트 추가 필드1
+    @Column(length = 100)
+    private String text2; //한 줄 텍스트 추가 필드2
+    @Column(length = 100)
+    private String text3; //한 줄 텍스트 추가 필드3
 
     @Lob
-    private String longText1; // 여러줄 텍스트 추가 필드1
+    private String longText1; //여러줄 텍스트 추가 필드1
     @Lob
-    private String longText2; // 여러줄 텍스트 추가 필드2
-
+    private String longText2; //여러줄 텍스트 추가 필드2
 }
-
