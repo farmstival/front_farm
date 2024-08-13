@@ -97,6 +97,7 @@ public class DataTest2 {
         }
     }
 
+    // 작업 조회용 (건드리지 마세요!)
     @Test
     void test3() throws Exception {
         File file = new File("D:/data/fest1.json");
