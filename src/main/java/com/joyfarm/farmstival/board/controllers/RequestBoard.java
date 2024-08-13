@@ -13,6 +13,7 @@ public class RequestBoard { //커맨드객체
 
     private String bid; //게시판 ID
     private String gid = UUID.randomUUID().toString(); //파일, 이미지 업로드 시 필요, 중복이 되지 않는 unique 아이디로 기본값 대입
+    private boolean notice; //공지글 여부, 일반 회원 작성x 관리자만 쓰도록
     private String category; //분류
     private String poster; //작성자
     private String subject; //제목
