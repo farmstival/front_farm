@@ -22,11 +22,9 @@ public class BoardData extends BaseEntity { //게시글 데이터
 
     @JoinColumn(name = "bid") //게시판 별 게시글 구분 명
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(updatable = false)
     private Board board;
     //게시판 아이디(bid) 관계매핑을 통해 관련시켜 두면 특정 게시판엔 특정 게시글이 올것임!, 게시글쪽이 many
 
-    @Column(updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
     //회원쪽 아이디(seq) 한명의 회원이 여러개의 게시글 작성 가능, 게시글쪽이 many
