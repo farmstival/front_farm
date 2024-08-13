@@ -1,7 +1,10 @@
 package com.joyfarm.farmstival.farmfarm.entities;
 
 import com.joyfarm.farmstival.global.entities.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,19 +19,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Festival extends BaseEntity {
     @Id
-    private Long seq; // 기본키 - contentId
+    private Long seq;
+
+    @Column(length=20)
+    private String cat1;
+
+    @Column(length=20)
+    private String cat2;
+
+    @Column(length=20)
+    private String cat3;
 
     @Column(length=150, nullable = false)
     private String title; // 축제명
-
-    @Column(length=20)
-    private String cat1; // 분류명
-
-    @Column(length=20)
-    private String cat2; // 분류명
-
-    @Column(length=20)
-    private String cat3; // 분류명
 
     private Double latitude; // 위도
     private Double longitude; // 경도
@@ -39,7 +42,8 @@ public class Festival extends BaseEntity {
     @Column(length=150)
     private String address; // 주소
 
-    private String photoUrl1; // 사진
+    private String photoUrl1;
+
     private String photoUrl2;
 
     @Column(length=150)
