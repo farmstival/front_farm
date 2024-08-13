@@ -50,7 +50,7 @@ public class TokenProvider {
                         .signWith(getKey(), SignatureAlgorithm.HS512)
                         // HMAC + SHA512(Hash를 만들어 주는 것)
                         // .getName() -> 사용자 이메일 가지고 오는 것!
-                        // 이곳에서 가지고 오는 이메을은 확실하게 인증된 사용자 이메일. 로그인된 사용자 정보를 가지고 올 때 활용!
+                        // 이곳에서 가지고 오는 이메일은 확실하게 인증된 사용자 이메일. 로그인된 사용자 정보를 가지고 올 때 활용!
                         .expiration(validity)
                         .compact();
                         // 만료 시간도 토큰에 포함한다. 그렇기 때문에 따로 저장소에서 관리하지 않아도 된다.
