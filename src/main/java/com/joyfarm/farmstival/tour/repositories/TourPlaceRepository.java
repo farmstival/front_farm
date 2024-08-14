@@ -1,6 +1,6 @@
-package com.joyfarm.farmstival.farmfarm.repositories;
+package com.joyfarm.farmstival.tour.repositories;
 
-import com.joyfarm.farmstival.farmfarm.entities.TourPlace;
+import com.joyfarm.farmstival.tour.entities.TourPlace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
