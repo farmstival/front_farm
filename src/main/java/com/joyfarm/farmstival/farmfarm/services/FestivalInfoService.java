@@ -27,7 +27,7 @@ public class FestivalInfoService {
     /* 축제 목록 조회 */
     public ListData<Festival> getList(FestivalSearch search){
         int page = Math.max(search.getPage(), 1); // max - 둘 중에 큰 수 반환 함수(0이 오면 1반환)
-        int limit = search.getLimit(); // 한 페이지 당 보여줄 레코드 갯수
+        int limit = search.getLimit(); // 한 페이지 당 보여줄 레코드 갯수!
         limit = limit < 1 ? 20 : limit;
         int offset = (page - 1) * limit; // 레코드 시작 위치 (1-20 / 21-40 / ...)
 
