@@ -16,12 +16,12 @@ public class BeanConfig { // 자주 쓰는 빈들을 수동 등록
     private final EntityManager em;
 
     @Bean
-    public JPAQueryFactory jpaQueryFactory() {
+    public JPAQueryFactory jpaQueryFactory(){
         return new JPAQueryFactory(em);
     }
 
     @Bean
-    public ObjectMapper objectMapper() {
+    public ObjectMapper objectMapper(){
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
 
@@ -29,7 +29,7 @@ public class BeanConfig { // 자주 쓰는 빈들을 수동 등록
     }
 
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate restTemplate(){
         return new RestTemplate();
     }
 }

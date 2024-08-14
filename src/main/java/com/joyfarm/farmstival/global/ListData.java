@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.global;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
