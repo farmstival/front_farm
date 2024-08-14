@@ -8,6 +8,7 @@ public class TourPlaceSearch extends CommonSearch {
     /**
      * ALL - 통합 검색 - title, tel, address, description
      * TITLE, TEL, ADDRESS, DESCRIPTION
+     *
      */
 
     // SIDO : 시도
@@ -15,4 +16,5 @@ public class TourPlaceSearch extends CommonSearch {
 
     // SIDO + SIGUNGU : 시도 + 시군구
     private String sigungu;
+
 }

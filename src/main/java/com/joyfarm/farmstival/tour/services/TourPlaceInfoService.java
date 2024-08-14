@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -24,26 +25,25 @@ import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 @RequiredArgsConstructor
+@Transactional // 엔티티 매니저 사용 시 필수
 public class TourPlaceInfoService {
 
     private final TourPlaceRepository repository;
     private final HttpServletRequest request;
 
-    public ListData<TourPlace> getList(TourPlaceSearch search) {
-        int page = Math.max(search.getPage(), 1);
-        int limit = search.getLimit();
+    public ListData<TourPlace> getList (TourPlaceSearch search) {
+        int page = Math.max(search.getPage(), 1); // max함수 : 두 수를 비교해서 큰 수를 반환한다(1 미만의 수가 들어왔을 때는 1로 대체)
+        int limit = search.getLimit(); // 한 페이지 당 보여줄 레코드 갯수
         limit = limit < 1 ? 20 : limit;
-        int offset = (page - 1) * limit;
 
         /* 검색 처리 S */
         QTourPlace tourPlace = QTourPlace.tourPlace;
         BooleanBuilder andBuilder = new BooleanBuilder();
-        // AND 조건이 주축, 필요에 따라 OR 조건 추가
 
-        String sopt = search.getSopt();
-        String skey = search.getSkey();
-        String sido = search.getSido();
-        String sigungu = search.getSigungu();
+        String sopt = search.getSopt(); // 검색 옵션 ALL - 통합 검색
+        String skey = search.getSkey(); // 검색 키워드 - 조건별 검색
+        String sido = search.getSido();  // 시도 조회
+        String sigungu = search.getSigungu(); // 시도에 종속적인 데이터이므로 시도가 있을 때 부가적으로 조회 가능
 
         sopt = StringUtils.hasText(sopt) ? sopt : "ALL"; // 통합 검색이 기본
 
@@ -51,68 +51,66 @@ public class TourPlaceInfoService {
         if (StringUtils.hasText(skey) && StringUtils.hasText(skey.trim())) {
             /**
              * sopt
-             * ALL - 통합 검색 - TITLE, TEL, ADDRESS, DESCRIPTION
+             * ALL - 통합 검색 - title, tel, address, description
              * TITLE, TEL, ADDRESS, DESCRIPTION
+             *
              */
             sopt = sopt.trim();
             skey = skey.trim();
 
             BooleanExpression condition = null;
-            if (sopt.equals("ALL")){ // 통합 검색
+            if(sopt.equals("ALL")) { // 통합 검색
                 condition = tourPlace.title.concat(tourPlace.tel).concat(tourPlace.address).concat(tourPlace.description).contains(skey);
 
             } else if (sopt.equals("TITLE")) { // 여행지 명
                 condition = tourPlace.title.contains(skey);
 
             } else if (sopt.equals("TEL")) { // 여행지 연락처
-                skey = skey.replaceAll("\\D", ""); // TEL_2차가공_숫자만 남김
+                skey = skey.replaceAll("\\D", ""); // 숫자만 남긴다.
                 condition = tourPlace.tel.contains(skey);
 
             } else if (sopt.equals("ADDRESS")) { // 여행지 주소
                 condition = tourPlace.address.contains(skey);
 
-            } else if (sopt.equals("DESCRIPTION")) { // 여행지 소개
+            } else if (sopt.equals("DESCRIPTION")) { // 여행지 설명
                 condition = tourPlace.description.contains(skey);
-
             }
+
             if (condition != null) andBuilder.and(condition);
         }
 
         // 시도 검색
         if (sido != null && StringUtils.hasText(sido.trim())) {
-            andBuilder.and(tourPlace.sido.eq(sido.trim()));
+            andBuilder.and(tourPlace.sido.eq(sido));
 
-            // 시군구 검색
+            // 시군구 검색 (이것만 있으면 조회가 되지 않고, 꼭 시도가 있어야 함께 조회가 된다.)
             if (sigungu != null && StringUtils.hasText(sigungu.trim())) {
                 andBuilder.and(tourPlace.sigungu.eq(sigungu.trim()));
             }
         } // endif - sido
+        /* 검색 처리 E */
 
-         /* 검색 처리 E */
-
-        // 페이징 및 정렬 처리
+        /* 페이징 및 정렬 처리 */
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
 
-        // 데이터 조회
+        /* 데이터 조회 */
         Page<TourPlace> data = repository.findAll(andBuilder, pageable);
 
+        // Pagination 객체 만들기
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
 
-        List<TourPlace> items = data.getContent(); // limit 갯수에 맞춰 출력
+        List<TourPlace> items = data.getContent(); // 갯수에 맞게 조회된 데이터
 
-        return new ListData<>(items, pagination); // 페이징 가능한 목록 생성!
+        return new ListData<>(items, pagination);
     }
 
     /**
-     * 상세 조회
+     * 여행지 상세 조회
      * @param seq
      * @return
      */
-    public TourPlace get(Long seq){
-
+    public TourPlace get(Long seq) {
         TourPlace item = repository.findById(seq).orElseThrow(TourPlaceNotFoundException::new);
-
-        // 추가 데이터 처리 ( 수용 인원, 휴무일 ... )
 
         return item;
     }

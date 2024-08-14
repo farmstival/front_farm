@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 스프링 시큐리티에서 유저의 정보를 불리오기 위해 구현
+ * 스프링 시큐리티에서 유저의 정보를 불러오기 위해 구현
  */
 @Service
 @RequiredArgsConstructor
