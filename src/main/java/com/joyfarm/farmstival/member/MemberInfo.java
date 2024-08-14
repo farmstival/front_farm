@@ -21,9 +21,9 @@ public class MemberInfo implements UserDetails {
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    private Member member; //회원정보 가져오도록
+    private Member member; // 회원정보 가져오도록
 
-    //사용자의 권한을 스프링 시큐리티가 인식 할 수 있도록 해줌
+    // 사용자의 권한을 스프링 시큐리티가 인식 할 수 있도록 해줌
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

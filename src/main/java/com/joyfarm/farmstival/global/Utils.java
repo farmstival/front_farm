@@ -2,6 +2,8 @@ package com.joyfarm.farmstival.global;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -19,11 +21,7 @@ public class Utils { // 빈의 이름 - utils
 
     private final MessageSource messageSource; // 메시지 코드로부터 실제 메시지를 가져오는데 사용
     private final HttpServletRequest request;
-
-    //접근 방법 알기 위해 임의로 정의 이렇게 해줄필요는 없다 X
-    public String toUpper(String str) {
-        return str.toUpperCase();
-    }
+    private final DiscoveryClient discoveryClient;
 
     /* Errors 객체를 받아서 필드명과 그에 대한 오류 메시지를 Map으로 반환하는 메서드 */
     public Map<String, List<String>> getErrorMessages(Errors errors) {
@@ -68,6 +66,17 @@ public class Utils { // 빈의 이름 - utils
     public String getMessage(String code) {
         List<String> messages = getCodeMessages(new String[] {code});
 
-        return messages.isEmpty() ? code : messages.get(0); //메시지가 없으면 코드 반환, 있으면 메시지 그대로 반환
+        return messages.isEmpty() ? code : messages.get(0); // 메시지가 없으면 코드 반환, 있으면 메시지 그대로 반환
+    }
+
+    public String url(String url) {
+        List<ServiceInstance> instances = discoveryClient.getInstances("api-service");
+
+        try{
+            return String.format("%s%s", instances.get(0).getUri().toString(), url);
+            // 각 서버에서 지원하는 정적 자원의 경로는 게이트웨이 쪽에서 접근하는 것이 바람직 하지 않다!
+        }catch (Exception e) {
+            return String.format("%s://%s:%d%s%s", request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+        }
     }
 }
