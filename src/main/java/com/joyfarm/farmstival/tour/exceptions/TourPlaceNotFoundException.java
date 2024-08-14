@@ -1,4 +1,4 @@
-package com.joyfarm.farmstival.farmfarm.exceptions;
+package com.joyfarm.farmstival.tour.exceptions;
 
 import com.joyfarm.farmstival.global.exceptions.CommonException;
 import org.springframework.http.HttpStatus;
