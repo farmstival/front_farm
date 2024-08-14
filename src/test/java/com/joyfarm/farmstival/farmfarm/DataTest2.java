@@ -70,7 +70,7 @@ public class DataTest2 {
 
     @Test
     void test2() throws Exception {
-        File file = new File("D:/data/fest2.txt");
+        File file = new File("/Users/siwon/data/fest2.txt");
 
         try (FileInputStream fis = new FileInputStream(file);
              InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -100,7 +100,7 @@ public class DataTest2 {
     // 작업 조회용 (건드리지 마세요!)
     @Test
     void test3() throws Exception {
-        File file = new File("D:/data/fest1.json");
+        File file = new File("/Users/siwon/data/fest1.txt");
 
         Map<String, List<Map<String, String>>> data = om.readValue(file, new TypeReference<>(){});
         List<Map<String, String>> records = data.get("records");
