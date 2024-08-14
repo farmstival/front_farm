@@ -1,4 +1,4 @@
-package com.joyfarm.farmstival.farmfarm.entities;
+package com.joyfarm.farmstival.tour.entities;
 
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;

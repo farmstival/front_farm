@@ -1,4 +1,4 @@
-package com.joyfarm.farmstival.farmfarm.entities;
+package com.joyfarm.farmstival.tour.entities;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QTourPlace extends EntityPathBase<TourPlace> {
 
-    private static final long serialVersionUID = -99221002L;
+    private static final long serialVersionUID = 594052746L;
 
     public static final QTourPlace tourPlace = new QTourPlace("tourPlace");
 
