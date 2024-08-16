@@ -8,6 +8,7 @@ import com.joyfarm.farmstival.board.exceptions.BoardDataNotFoundException;
 import com.joyfarm.farmstival.board.repositories.BoardDataRepository;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
+import com.joyfarm.farmstival.global.constants.DeleteStatus;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -37,11 +39,12 @@ public class BoardInfoService {
      * 게시글 목록 조회
      * @return
      */
-    public ListData<BoardData> getList(BoardDataSearch search){
+    public ListData<BoardData> getList(BoardDataSearch search, DeleteStatus status){
 
         int page = Math.max(search.getPage(),1);//기본값은 1, 1 미만의 값 들어올 수 없다
         int limit = search.getLimit();
         int offset = (page - 1) * limit;
+        status = Objects.requireNonNullElse(status,DeleteStatus.UNDELETED); //삭제가 되지 않은 게시글 목록이 기본값
 
         String sopt = search.getSopt(); //검색 옵션
         String skey = search.getSkey(); //검색 키워드
@@ -52,6 +55,15 @@ public class BoardInfoService {
         /* 검색 처리S */
         QBoardData boardData = QBoardData.boardData;
         BooleanBuilder andBuilder = new BooleanBuilder();
+
+        //삭제, 미삭제 게시글 조회 처리
+        if(status != DeleteStatus.All){
+            if(status == DeleteStatus.UNDELETED){
+                andBuilder.and(boardData.deletedAt.isNull()); // 미삭제된 게시글
+            }else {
+                andBuilder.and(boardData.deletedAt.isNotNull()); // 삭제된 게시글
+            }
+        }
 
         //bid가 없을때는 bids로 조회
         if(bid != null && StringUtils.hasText(bid.trim())){ //게시판별 조회
@@ -178,10 +190,14 @@ public class BoardInfoService {
      * @param search
      * @return
      */
-    public ListData<BoardData> getList(String bid, BoardDataSearch search){
+    public ListData<BoardData> getList(String bid, BoardDataSearch search, DeleteStatus status){
         search.setBid(bid);//게시판 아이디
 
-        return getList(search);
+        return getList(search, status);
+    }
+
+    public ListData<BoardData> getList(String bid, BoardDataSearch search){
+        return getList(bid, search, DeleteStatus.UNDELETED);
     }
 
     /**
@@ -189,9 +205,32 @@ public class BoardInfoService {
      * @param seq
      * @return
      */
-    public BoardData get(Long seq){
+    public BoardData get(Long seq, DeleteStatus status){
 
-        BoardData item = repository.findById(seq).orElseThrow(BoardDataNotFoundException::new);
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        QBoardData boardData = QBoardData.boardData;
+        andBuilder.and(boardData.seq.eq(seq));
+
+        //삭제, 미삭제 게시글 조회 처리
+        if(status != DeleteStatus.All){
+            if(status == DeleteStatus.UNDELETED){
+                andBuilder.and(boardData.deletedAt.isNull()); // 미삭제된 게시글
+            }else {
+                andBuilder.and(boardData.deletedAt.isNotNull()); // 삭제된 게시글
+            }
+        }
+
+        BoardData item = queryFactory.selectFrom(boardData)
+                .leftJoin(boardData.board)
+                .fetchJoin()
+                .leftJoin(boardData.member)
+                .fetchJoin()
+                .where(andBuilder)
+                .fetchFirst();
+
+        if(item == null){
+            throw  new BoardDataNotFoundException();
+        }
 
         //추가 데이터 처리
         addInfo(item);
@@ -199,19 +238,31 @@ public class BoardInfoService {
         return item;
     }
 
+    public BoardData get(Long seq){
+        return get(seq, DeleteStatus.UNDELETED);
+    }
+
     /**
      * BoardData 엔티티 -> RequestBoard 커맨드 객체로 변환할 수 있는 편의 메서드
      * @param seq
      * @return
      */
-    public RequestBoard getForm(Long seq){
-        BoardData item = get(seq);
+    public RequestBoard getForm(Long seq, DeleteStatus status){
+        BoardData item = get(seq, status);
 
-        return getForm(item);
+        return getForm(item, status);
     }
 
-    public RequestBoard getForm(BoardData item){
+    public RequestBoard getForm(BoardData item, DeleteStatus status){
         return new ModelMapper().map(item,RequestBoard.class); // 같은 getter,setter 메서드가 있으면 데이터 치환
+    }
+
+    public RequestBoard getForm(Long seq) {
+        return getForm(seq, DeleteStatus.UNDELETED);
+    }
+
+    public RequestBoard getForm(BoardData item) {
+        return getForm(item, DeleteStatus.UNDELETED);
     }
 
     /**
