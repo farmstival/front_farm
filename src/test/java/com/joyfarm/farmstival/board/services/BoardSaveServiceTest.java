@@ -3,7 +3,6 @@ package com.joyfarm.farmstival.board.services;
 import com.joyfarm.farmstival.board.controllers.RequestBoard;
 import com.joyfarm.farmstival.board.entities.Board;
 import com.joyfarm.farmstival.board.entities.BoardData;
-import com.joyfarm.farmstival.board.repositories.BoardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,8 @@ public class BoardSaveServiceTest {
 
     @Autowired
     private BoardSaveService saveService;
-    @Autowired
-    private BoardRepository boardRepository;
+//    @Autowired
+//    private BoardRepository boardRepository;
 
     private Board board;
 
@@ -28,7 +27,7 @@ public class BoardSaveServiceTest {
         board.setBName("자유게시판");
 
         System.out.println(board);
-        boardRepository.saveAndFlush(board);
+//        boardRepository.saveAndFlush(board);
     }
 
     @Test
