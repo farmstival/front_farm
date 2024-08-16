@@ -2,12 +2,15 @@ package com.joyfarm.farmstival.board.services;
 
 import com.joyfarm.farmstival.board.controllers.BoardDataSearch;
 import com.joyfarm.farmstival.board.controllers.RequestBoard;
+import com.joyfarm.farmstival.board.entities.Board;
 import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.entities.QBoardData;
 import com.joyfarm.farmstival.board.exceptions.BoardDataNotFoundException;
+import com.joyfarm.farmstival.board.exceptions.BoardNotFoundException;
 import com.joyfarm.farmstival.board.repositories.BoardDataRepository;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
+import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.global.constants.DeleteStatus;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -34,6 +37,8 @@ public class BoardInfoService {
     private final JPAQueryFactory queryFactory;
     private final BoardDataRepository repository;
     private final HttpServletRequest request;
+    private final BoardConfigInfoService configInfoService;
+    private final Utils utils;
 
     /**
      * 게시글 목록 조회
@@ -41,16 +46,23 @@ public class BoardInfoService {
      */
     public ListData<BoardData> getList(BoardDataSearch search, DeleteStatus status){
 
+        String bid = search.getBid(); //단일 조회
+        List<String> bids = search.getBids(); //게시판 여러개 조회
+
+        //게시판 설정 조회
+        Board board = bid != null && StringUtils.hasText(bid.trim()) ? configInfoService.get(bid.trim()).orElseThrow(BoardNotFoundException::new) : new Board();
+
         int page = Math.max(search.getPage(),1);//기본값은 1, 1 미만의 값 들어올 수 없다
         int limit = search.getLimit();
+        limit = limit > 0 ? limit : board.getRowsPerPage();
+
         int offset = (page - 1) * limit;
+
         status = Objects.requireNonNullElse(status,DeleteStatus.UNDELETED); //삭제가 되지 않은 게시글 목록이 기본값
 
         String sopt = search.getSopt(); //검색 옵션
         String skey = search.getSkey(); //검색 키워드
 
-        String bid = search.getBid(); //단일 조회
-        List<String> bids = search.getBids(); //게시판 여러개 조회
 
         /* 검색 처리S */
         QBoardData boardData = QBoardData.boardData;
@@ -177,7 +189,9 @@ public class BoardInfoService {
         long total = repository.count(andBuilder);
 
         //페이징 처리
-        Pagination pagination = new Pagination(page,(int)total,10,limit,request); //현재 페이지, 전체 레코드 개수, 페이지 구간 개수,1페이지 당 레코드 개수
+        int ranges = board.getPageCountPc();
+
+        Pagination pagination = new Pagination(page,(int)total,ranges,limit,request); //현재 페이지, 전체 레코드 개수, 페이지 구간 개수,1페이지 당 레코드 개수
 
         return new ListData<>(items,pagination);
     }
