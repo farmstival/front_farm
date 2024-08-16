@@ -1,10 +1,9 @@
-package com.joyfarm.farmstival.board;
+package com.joyfarm.farmstival.board.services;
 
 import com.joyfarm.farmstival.board.controllers.RequestBoard;
 import com.joyfarm.farmstival.board.entities.Board;
 import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.repositories.BoardRepository;
-import com.joyfarm.farmstival.board.services.BoardSaveService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
