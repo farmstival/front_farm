@@ -6,7 +6,7 @@ import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.exceptions.BoardDataNotFoundException;
 import com.joyfarm.farmstival.board.exceptions.BoardNotFoundException;
 import com.joyfarm.farmstival.board.repositories.BoardDataRepository;
-import com.joyfarm.farmstival.board.repositories.BoardRepository;
+import com.joyfarm.farmstival.file.services.FileUploadDoneService;
 import com.joyfarm.farmstival.member.MemberUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,10 @@ import org.springframework.util.StringUtils;
 public class BoardSaveService {
     private final HttpServletRequest request;
     private final PasswordEncoder encoder;
-    private final BoardRepository boardRepository;
+    private final BoardConfigInfoService configInfoService;
     private final BoardDataRepository boardDataRepository;
     private final MemberUtil memberUtil;
+    private final FileUploadDoneService doneService;
     //파일 의존성 추가
 
     public BoardData save(RequestBoard form){//게시글 작성 이후 이동(게시글 목록, 게시글 보기)하려면 게시글 정보가 필요함
@@ -42,7 +43,7 @@ public class BoardSaveService {
         }else { //글 작성
             String bid = form.getBid();
             //게시판 조회
-            Board board = boardRepository.findById(bid).orElseThrow(BoardNotFoundException::new); //게시판이 없을때 에러 던짐
+            Board board = configInfoService.get(bid).orElseThrow(BoardNotFoundException::new); //게시판이 없을때 에러 던짐
 
             data = BoardData.builder()
                     .gid(gid)
