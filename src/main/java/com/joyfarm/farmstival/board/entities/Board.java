@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.board.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.joyfarm.farmstival.global.entities.BaseMemberEntity;
 import com.joyfarm.farmstival.member.constants.Authority;
 import jakarta.persistence.*;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(indexes = @Index(name="idx_board_basic", columnList = "listOrder DESC, createdAt DESC"))// 테이블의 인덱스를 정의, name: 인덱스 이름, 인덱스 정렬순서: listOrder 컬럼 기준으로 내림차순, 값이 같으면 createdAt 기준으로 내림차순(최신항목)
 public class Board extends BaseMemberEntity {
     @Id
