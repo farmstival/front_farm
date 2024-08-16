@@ -3,6 +3,7 @@ package com.joyfarm.farmstival.board.services;
 import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.repositories.BoardDataRepository;
 import com.joyfarm.farmstival.file.services.FileDeleteService;
+import com.joyfarm.farmstival.global.constants.DeleteStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class BoardDeleteService {
      */
     @Transactional
     public BoardData complete(Long seq){
-        BoardData data = infoService.get(seq);
+        BoardData data = infoService.get(seq, DeleteStatus.All);
 
         String gid = data.getGid();
 
