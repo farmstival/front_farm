@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.member.entities;
 
+import com.joyfarm.farmstival.file.entities.FileInfo;
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,4 +35,7 @@ public class Member extends BaseEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
     private List<Authorities> authorities;
+
+    @Transient
+    private FileInfo profile;
 }

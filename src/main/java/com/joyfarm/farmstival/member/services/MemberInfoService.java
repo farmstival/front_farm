@@ -1,5 +1,7 @@
 package com.joyfarm.farmstival.member.services;
 
+import com.joyfarm.farmstival.file.entities.FileInfo;
+import com.joyfarm.farmstival.file.services.FileInfoService;
 import com.joyfarm.farmstival.member.MemberInfo;
 import com.joyfarm.farmstival.member.constants.Authority;
 import com.joyfarm.farmstival.member.entities.Authorities;
@@ -22,6 +24,7 @@ import java.util.List;
 public class MemberInfoService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final FileInfoService fileInfoService;
 
     /* 회원 정보가 필요할때마다 호출되는 메서드 */
     @Override
@@ -45,6 +48,11 @@ public class MemberInfoService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = tmp.stream()
                 .map(a -> new SimpleGrantedAuthority(a.getAuthority().name()))
                 .toList();//Authority enum의 name 메서드를 호출하여 문자열로 변환해야한다.(authority는 enum상수로 되어있기 때문!)
+
+
+        // 프로필 이미지 처리
+        List<FileInfo> files = fileInfoService.getList(member.getGid());
+        if (files != null && !files.isEmpty()) member.setProfile(files.get(0));
 
         return MemberInfo.builder()
                 .email(member.getEmail())
