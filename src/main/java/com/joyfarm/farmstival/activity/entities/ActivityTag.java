@@ -14,7 +14,7 @@ import java.util.List;
 public class ActivityTag {
 
     @Id
-    @Column(length = 60)
+    @Column(length=30)
     private String tag;
 
     @JsonIgnore // JSON 문자열 변환시 순환참조 방지

@@ -1,6 +1,6 @@
 package com.joyfarm.farmstival.activity.validators;
 
-import com.joyfarm.farmstival.activity.controllers.RequestReservation;
+import com.joyfarm.farmstival.activity.entities.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,7 +12,7 @@ public class ReservationValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(RequestReservation.class);
+        return clazz.isAssignableFrom(Reservation.class);
     }
 
     @Override

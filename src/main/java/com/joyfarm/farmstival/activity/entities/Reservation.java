@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.activity.entities;
 
+
 import com.joyfarm.farmstival.activity.constants.AM_PM;
 import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.global.entities.BaseEntity;
@@ -12,54 +13,55 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Entity
+
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reservation extends BaseEntity {
-    @Id
-    @GeneratedValue
-    private Long seq;
+    //해당 시점의 데이터를 기록
+
+    @Id @GeneratedValue
+    private Long seq; //자동증감번호
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Member member; //한명이 여러 예약 가능
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Activity activity;
-
+    
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status; //null->상태 변경 시 메일
 
     @Column(length = 40, nullable = false)
-    private String name; // 예약자명
+    private String name; //예약자명
 
     @Column(length = 100, nullable = false)
-    private String email; // 예약자 이메일
+    private String email; //예약자 이메일
 
     @Column(length = 20, nullable = false)
-    private String mobile; // 예약자 휴대전화번호
+    private String mobile; //예약자 전화번호
 
-    /* DB S */
     @Column(length = 80)
-    private String townName; // 체험마을명
+    private String townName; //체험마을명
 
     @Column(length = 100)
-    private String activityName; // 체험프로그램명
+    private String activityName; //체험프로그램명
 
     @Column(length = 100)
-    private String doroAddress; // 주소
+    private String doroAddress; //도로명 주소
 
     @Column(length = 40)
-    private String ownerName; // 대표자명
+    private String ownerName; //대표자명
 
     @Column(length = 20)
-    private String ownerTel; // 대표자 전화번호
-    /* DB E */
-    private LocalDate rDate; // 예약일
-
-    private AM_PM ampm; // 오전/오후 구분
-
-    private int persons = 1; // 예약인원수
+    private String ownerTel; //대표자 전화번호
+    
+    private LocalDate rDate; //예약 날짜
+    
+    private AM_PM ampm; //오전, 오후 구분
+    
+    private int persons = 1; //예약 인원수
 }

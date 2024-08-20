@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
 public class ReservationApplyService {
     private final ReservationRepository reservationRepository;
     private final ActivityRepository activityRepository;
-    private final ReservationStatuService statuService;
+    private final ReservationStatusService statusService;
     private final MemberUtil memberUtil;
 
     public Reservation apply(RequestReservation form) {
@@ -26,9 +26,10 @@ public class ReservationApplyService {
         Activity activity = activityRepository.findById(activitySeq).orElseThrow(ActivityNotFoundException::new);
 
         String mobile = form.getMobile();
-        if(StringUtils.hasText(mobile)){
+        if (StringUtils.hasText(mobile)) {
             mobile = mobile.replaceAll("\\D", "");
         }
+
         Reservation reservation = Reservation.builder()
                 .activity(activity)
                 .email(form.getEmail())
@@ -42,14 +43,15 @@ public class ReservationApplyService {
                 .ownerTel(activity.getOwnerTel())
                 .rDate(form.getRDate())
                 .ampm(AM_PM.valueOf(form.getAmpm()))
-                .persons(Math.max(form.getPersons(),1))
+                .persons(Math.max(form.getPersons(), 1)) //예약 인원 최대 1명 이상
                 .build();
 
         reservationRepository.saveAndFlush(reservation);
 
-        // 예약 접수 상태로 변경
-        statuService.change(reservation.getSeq(), Status.APPLY);
 
-        return null;
+        //예약 접수 상태로 변경
+        statusService.change(reservation.getSeq(), Status.APPLY);
+
+        return reservation;
     }
 }

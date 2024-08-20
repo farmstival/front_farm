@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 public class ReservationSearch extends CommonSearch {
 
-    private LocalDate sDate; // 예약 검색 시작일
-    private LocalDate eDate; // 예약 검색 종료일
+    private LocalDate sDate; //예약일 검색 시작일
+    private LocalDate eDate; //예약일 검색 종료일
 
-    private List<Long> memberSeqs; // 회원번호 목록
+    private List<Long> memberSeqs; //회원번호 목록
 }
