@@ -4,7 +4,7 @@ import java.util.List;
 
 public enum Status {
     APPLY("예약"),
-    CANCEL("예약취소");
+    CANCEL("취소");
 
     private final String title;
 

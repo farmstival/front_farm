@@ -47,7 +47,7 @@ public class SecurityConfig {
                                     "/festival/**",
                                     "/tour/**",
                                     "/reservation/**",
-                                    "board/**",
+                                    "/board/**",
                                     "/file/**",
                                     "/upload/**"
                             ).permitAll() // 회원가입, 로그인(토큰)은 모든 접근 가능
