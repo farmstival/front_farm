@@ -64,5 +64,5 @@ public class Reservation extends BaseEntity {
     private String providerName; //제공기관명
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Reservation> acTags;
+    private List<ReservationTag> acTags;
 }
