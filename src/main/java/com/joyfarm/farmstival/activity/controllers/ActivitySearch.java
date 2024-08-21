@@ -4,7 +4,7 @@ import com.joyfarm.farmstival.global.CommonSearch;
 import lombok.Data;
 
 @Data
-public class ActivitySearch extends CommonSearch { //페이징 적용
+public class ActivitySearch extends CommonSearch { //페이징 공통 적용
 
     private Double latitude;
     private Double longitude;

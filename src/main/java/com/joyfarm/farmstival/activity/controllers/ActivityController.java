@@ -33,7 +33,7 @@ public class ActivityController {
      * @return
      */
     @GetMapping("/info/{seq}")
-    public JSONData info(@RequestParam("seq") Long seq) {
+    public JSONData info(@PathVariable("seq") Long seq) {
 
         Activity data = infoService.get(seq);
 
