@@ -6,6 +6,7 @@ import com.joyfarm.farmstival.activity.entities.Activity;
 import com.joyfarm.farmstival.activity.entities.ActivityTag;
 import com.joyfarm.farmstival.activity.repositories.ActivityRepository;
 import com.joyfarm.farmstival.activity.repositories.ActivityTagRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ public class DataTransfer {
     private ActivityTagRepository tagRepository;
 
     @Test
+    @DisplayName("휴양마을 데이터 DB 저장")
     void transfer1() throws Exception {
         File file = new File("D:/data/farmData.json");
         Map<String, List<Map<String, String>>> tmp = om.readValue(file, new TypeReference<>() {});
@@ -64,7 +66,7 @@ public class DataTransfer {
         /* 체험활동 처리 E */
 
         /* 태그 처리 S */
-
+        //추가 필요하면 해당 부분에서 추가하면 됨
         for (Activity item : items) {
             String tagNames = item.getActivityName();
             String facilityInfo = item.getFacilityInfo();
@@ -74,9 +76,9 @@ public class DataTransfer {
 
             if (!StringUtils.hasText(tagNames)) continue;
 
-            List<ActivityTag> tags = Arrays.stream(tagNames.split("\\+"))
+            List<ActivityTag> tags = Arrays.stream(tagNames.split("\\+")) //메타 문자여서 \\+로 분리
                     .filter(s -> !s.isBlank())
-                    .distinct()
+                    .distinct() //중복 제거
                     .map(tag -> ActivityTag.builder().tag(tag).build()).toList();
             if (tags == null || tags.isEmpty()) continue;
 
@@ -89,4 +91,3 @@ public class DataTransfer {
         /* 태그 처리 E */
     }
 }
-

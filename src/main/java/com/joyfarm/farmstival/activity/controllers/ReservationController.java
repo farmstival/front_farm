@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,9 +63,28 @@ public class ReservationController {
         return new JSONData(data);
     }
 
+    //상세정보 조회
     @GetMapping("/info/{seq}")
     public JSONData info(@PathVariable("seq") Long seq) {
         Reservation reservation = infoService.get(seq, true);
+
+        return new JSONData(reservation);
+    }
+
+    //관리자가 조회할 때
+    @GetMapping("/admin/list")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public JSONData adminlist(@ModelAttribute ReservationSearch search) {
+
+        ListData<Reservation> data = infoService.getList(search);
+
+        return new JSONData(data);
+    }
+    
+    @GetMapping("/admin/info/{seq}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public JSONData adminInfo(@PathVariable("seq") Long seq) {
+        Reservation reservation = infoService.get(seq);
 
         return new JSONData(reservation);
     }
