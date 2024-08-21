@@ -39,7 +39,7 @@ public class ActivityInfoService {
     public Activity get(Long seq) {
         Activity item = activityRepository.findById(seq).orElseThrow(ActivityNotFoundException::new);
 
-//        // 추가 정보 처리
+        // 추가 정보 처리
 //        addInfo(item);
         return item;
     }
@@ -75,8 +75,10 @@ public class ActivityInfoService {
              *      ALL - 통합 검색
              *            townName(체험 마을명), activityName (체험프로그램명)
              *            doroAddress(주소), ownerName(대표자명), ownerTel(대표자 전화번호)
+             *      DIVISION - 프로그램구분
              *      ADDRESS - 도로명 주소
              *      ACTIVITY - 체험 마을명 + 체험프로그램명
+             *      FACILITYINFO - 보유시설정보
              */
 
             skey = skey.trim();

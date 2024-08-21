@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.activity.controllers;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class RequestReservation { //커맨드 객체
     private LocalDate rDate; //예약일
     
     private String ampm; //오전, 오후
-    
-    private int persons = 1; //예약 인원수
+
+    @Min(1)
+    private int persons; //예약 인원수, 최소 1명 이상
 }
