@@ -11,7 +11,6 @@ public class RequestBoard { //커맨드객체
     private Long seq; //글 번호 - 글 수정시 필요
 
     private String mode = "write"; // write: 글 작성, update: 글 수정 / 작성, 수정 여부 알 수 있는 값
-    @NotBlank
     private String bid; //게시판 ID
     private String gid = UUID.randomUUID().toString(); //파일, 이미지 업로드 시 필요, 중복이 되지 않는 unique 아이디로 기본값 대입
     private boolean notice; //공지글 여부 - 일반 회원 작성x 관리자만 쓰도록
