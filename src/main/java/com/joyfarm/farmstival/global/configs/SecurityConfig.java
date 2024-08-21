@@ -47,6 +47,7 @@ public class SecurityConfig {
                                     "/festival/**",
                                     "/tour/**",
                                     "/reservation/**",
+                                    "/myreservation/**",
                                     "/board/**",
                                     "/file/**",
                                     "/upload/**"
