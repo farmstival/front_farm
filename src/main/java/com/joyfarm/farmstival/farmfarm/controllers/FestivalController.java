@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/festival") // CRUD 를 담당하는 서버로, 리액트쪽 서버와는 관련 없음!!
-
 @RequiredArgsConstructor
 public class FestivalController {
 
