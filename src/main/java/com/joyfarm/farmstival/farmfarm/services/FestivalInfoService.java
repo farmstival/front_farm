@@ -7,6 +7,7 @@ import com.joyfarm.farmstival.farmfarm.exceptions.FestivalNotFoundException;
 import com.joyfarm.farmstival.farmfarm.repositories.FestivalRepository;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
+import com.joyfarm.farmstival.global.Utils;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ import static org.springframework.data.domain.Sort.Order.desc;
 public class FestivalInfoService {
     private final HttpServletRequest request;
     private final FestivalRepository repository;
+    private final Utils utils;
     //private final JPAQueryFactory queryFactory; //infoService 쓰게 되면 순환 참조 발생
 
     /* 축제 목록 조회 */
@@ -75,6 +77,14 @@ public class FestivalInfoService {
         }
 
         // 주소 검색 추가
+        if (address != null && StringUtils.hasText(address.trim())) {
+            if (address.contains("경기")) {
+                BooleanBuilder orBuilder = new BooleanBuilder();
+                andBuilder.and(orBuilder.or(festival.address.contains(address)).or(festival.address.contains("인천")));
+            } else {
+                andBuilder.and(festival.address.contains(utils.getLongSido(address)));
+            }
+        }
 
         // 페이징 및 정렬 처리
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
