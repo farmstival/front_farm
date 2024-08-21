@@ -2,6 +2,7 @@ package com.joyfarm.farmstival.tour.services;
 
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
+import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.tour.controllers.TourPlaceSearch;
 import com.joyfarm.farmstival.tour.entities.QTourPlace;
 import com.joyfarm.farmstival.tour.entities.TourPlace;
@@ -30,6 +31,7 @@ public class TourPlaceInfoService {
 
     private final TourPlaceRepository repository;
     private final HttpServletRequest request;
+    private final Utils utils;
 
     public ListData<TourPlace> getList (TourPlaceSearch search) {
         int page = Math.max(search.getPage(), 1); // max함수 : 두 수를 비교해서 큰 수를 반환한다(1 미만의 수가 들어왔을 때는 1로 대체)
@@ -81,7 +83,13 @@ public class TourPlaceInfoService {
 
         // 시도 검색
         if (sido != null && StringUtils.hasText(sido.trim())) {
-            andBuilder.and(tourPlace.sido.eq(sido));
+            /* Utils 에 처리한 시 짧은 명칭/긴 명칭 변환 가져옴 */
+            String sido2 = utils.getShortSido(sido);
+            sido = utils.getLongSido(sido2);
+
+            BooleanBuilder orBuilder = new BooleanBuilder();
+            andBuilder.and(orBuilder.or(tourPlace.address.contains(sido.trim())
+                    .or(tourPlace.address.contains(sido2.trim()))));
 
             // 시군구 검색 (이것만 있으면 조회가 되지 않고, 꼭 시도가 있어야 함께 조회가 된다.)
             if (sigungu != null && StringUtils.hasText(sigungu.trim())) {
