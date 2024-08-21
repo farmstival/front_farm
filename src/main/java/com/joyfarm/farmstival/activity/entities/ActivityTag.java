@@ -1,4 +1,4 @@
-package com.joyfarm.farmstival.Reservation.entities;
+package com.joyfarm.farmstival.activity.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -11,14 +11,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationTag {
+public class ActivityTag {
 
     @Id
-    @Column(length = 30)
+    @Column(length = 60)
     private String tag;
 
     @JsonIgnore // JSON 문자열 변환시 순환참조 방지
     @ToString.Exclude // 롬복 toString() 호출 시 순환참조 방지
     @ManyToMany(mappedBy = "acTags", fetch = FetchType.LAZY)
-    private List<Reservation> items;
+    private List<Activity> items;
 }

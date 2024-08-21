@@ -1,4 +1,4 @@
-package com.joyfarm.farmstival.Reservation.entities;
+package com.joyfarm.farmstival.activity.entities;
 
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reservation extends BaseEntity {
+public class Activity extends BaseEntity {
     @Id
     @GeneratedValue
     private Long seq;
@@ -31,6 +31,7 @@ public class Reservation extends BaseEntity {
 
     private String division; //체험프로그램 구분
 
+    @Column(length = 1200)
     private String activityName; //체험프로그램명
 
     private String facilityInfo; //보유시설정보
@@ -64,5 +65,5 @@ public class Reservation extends BaseEntity {
     private String providerName; //제공기관명
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<ReservationTag> acTags;
+    private List<ActivityTag> acTags;
 }
