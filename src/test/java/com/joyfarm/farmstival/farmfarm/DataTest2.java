@@ -97,32 +97,27 @@ public class DataTest2 {
         }
     }
 
-
     // 작업 조회용 (건드리지 마세요!)
-//    @Test
-//    void test3() throws Exception {
-//        File file = new File("D:/data/fest1.json");
-//
-//        Map<String, List<Map<String, String>>> data = om.readValue(file, new TypeReference<>(){});
-//        List<Map<String, String>> records = data.get("records");
-//
-//        //System.out.println(records);
-//        List<Festival> items = records.stream()
-//                .map(r -> Festival.builder()
-//                        .title(r.get("축제명"))
-//                        .location("__" + r.get("개최장소") + "__")
-//                        .content(r.get("축제내용") + "__")
-//                        .hostMain(r.get("주최기관명") + "__")
-//                        .hostSub(r.get("주관기관명") + "__")
-//                        .pageLink(r.get("홈페이지주소"))
-//                        .build()
-//                ).collect(Collectors.toList());
-//
-//        items.forEach(System.out::println);
-//    }
+    @Test
+    void test3() throws Exception {
+        File file = new File("D:/data/fest1.json");
 
+        Map<String, List<Map<String, String>>> data = om.readValue(file, new TypeReference<>(){});
+        List<Map<String, String>> records = data.get("records");
 
-}
+        //System.out.println(records);
+        List<Festival> items = records.stream()
+                .map(r -> Festival.builder()
+                        .title(r.get("축제명"))
+                        .location("__" + r.get("개최장소") + "__")
+                        .content(r.get("축제내용") + "__")
+                        .hostMain(r.get("주최기관명") + "__")
+                        .hostSub(r.get("주관기관명") + "__")
+                        .pageLink(r.get("홈페이지주소"))
+                        .build()
+                ).collect(Collectors.toList());
+
+        items.forEach(System.out::println);
 
         //Map<String, Object> m1 = om.readValue(file, new TypeReference<>(){});
         //List<Map<String, String>> records = (List<Map<String, String>>) m1.get("records");
@@ -153,3 +148,7 @@ public class DataTest2 {
         }
         return Double.valueOf(value);
         */
+    }
+
+
+}

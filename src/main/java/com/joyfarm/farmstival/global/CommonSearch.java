@@ -9,5 +9,4 @@ public class CommonSearch {
 
     private String sopt; // 검색 옵션
     private String skey; // 검색 키워드
-
 }
