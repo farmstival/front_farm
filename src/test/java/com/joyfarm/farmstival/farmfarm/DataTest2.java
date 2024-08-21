@@ -85,7 +85,10 @@ public class DataTest2 {
                 if (festival == null) continue;
 
                 if (item.size() > 1) festival.setLocation(item.get(1).trim());
-                if (item.size() > 2) festival.setContent(item.get(2).trim());
+                if (item.size() > 2) {
+                    String content = item.get(2).trim().replace("+", ", ");
+                    festival.setContent(content);
+                }
                 if (item.size() > 3) festival.setHostMain(item.get(3).trim());
                 if (item.size() > 4) festival.setHostSub(item.get(4).trim());
                 if (item.size() > 5) festival.setPageLink(item.get(5).trim());
