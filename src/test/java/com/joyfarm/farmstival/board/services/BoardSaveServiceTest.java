@@ -15,8 +15,8 @@ public class BoardSaveServiceTest {
 
     @Autowired
     private BoardSaveService saveService;
-//    @Autowired
-//    private BoardRepository boardRepository;
+   // @Autowired
+//private BoardRepository boardRepository;
 
     private Board board;
 
@@ -27,7 +27,7 @@ public class BoardSaveServiceTest {
         board.setBName("자유게시판");
 
         System.out.println(board);
-//        boardRepository.saveAndFlush(board);
+      //  boardRepository.saveAndFlush(board);
     }
 
     @Test
