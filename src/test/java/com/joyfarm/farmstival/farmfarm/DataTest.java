@@ -7,6 +7,7 @@ import com.joyfarm.farmstival.tour.entities.TourPlace;
 import com.joyfarm.farmstival.tour.entities.TourPlaceTag;
 import com.joyfarm.farmstival.tour.repositories.TourPlaceRepository;
 import com.joyfarm.farmstival.tour.repositories.TourPlaceTagRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +32,7 @@ public class DataTest {
     private TourPlaceTagRepository tagRepository;
 
     @Test
+    @DisplayName("여행지 세부 정보 조회")
     void test1() throws Exception {
         File file = new File("D:/data/data1.json");
         List<Map<String, String>> tmp = om.readValue(file, new TypeReference<>() {});
@@ -51,6 +53,7 @@ public class DataTest {
     }
 
     @Test
+    @DisplayName("여행지 정보 조회")
     void test2() throws Exception {
         File file = new File("D:/data/data2.json");
         List<Map<String, String>> tmp = om.readValue(file, new TypeReference<>() {});
