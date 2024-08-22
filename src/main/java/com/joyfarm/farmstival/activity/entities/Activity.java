@@ -1,7 +1,5 @@
 package com.joyfarm.farmstival.activity.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.joyfarm.farmstival.activity.constants.AM_PM;
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -70,11 +68,7 @@ public class Activity extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<ActivityTag> acTags;
 
-
     @Transient
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private List<LocalDate> availableDates; // 예약가능한 날짜
+    private Map<LocalDate, boolean[]> availableDates; // 예약가능한 날짜, 오전/오후
 
-    @Transient
-    private Map<String, List<AM_PM>> availableTimes; // 예약가능한 시간대 -> 오전, 오후
 }

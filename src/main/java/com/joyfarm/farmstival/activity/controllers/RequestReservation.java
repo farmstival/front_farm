@@ -1,5 +1,7 @@
 package com.joyfarm.farmstival.activity.controllers;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestReservation { //커맨드 객체
     
     @NotNull
@@ -23,7 +26,8 @@ public class RequestReservation { //커맨드 객체
     @NotBlank
     private String mobile; //예약자 전화번혼
 
-    @NotBlank
+    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate rDate; //예약일
     

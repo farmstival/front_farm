@@ -71,5 +71,4 @@ public class ActivityController {
 
         return ResponseEntity.status(status).body(jsonData);
     }
-
 }
