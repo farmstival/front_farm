@@ -43,5 +43,5 @@ public class FileInfo extends BaseMemberEntity {
     private String filePath; // 파일 업로드 경로
 
     @Transient
-    private String fileDownloadUrl; // 파일 다운로드URL
+    private String fileDownloadUrl; //파일 다운로드 URL
 }
