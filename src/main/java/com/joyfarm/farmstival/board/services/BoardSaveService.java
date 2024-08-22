@@ -26,7 +26,6 @@ public class BoardSaveService {
     private final BoardDataRepository boardDataRepository;
     private final MemberUtil memberUtil;
     private final FileUploadDoneService doneService;
-    //파일 의존성 추가
 
     public BoardData save(RequestBoard form){//게시글 작성 이후 이동(게시글 목록, 게시글 보기)하려면 게시글 정보가 필요함
 
@@ -90,6 +89,7 @@ public class BoardSaveService {
         boardDataRepository.saveAndFlush(data);
 
         // 파일 업로드 완료 처리
+        doneService.process(gid);
 
         return data;
     }
