@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -63,4 +64,7 @@ public class Activity extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<ActivityTag> acTags;
+
+    @Transient // 날짜가 들어가고 true, false로 오전 오후 구분
+    private Map<LocalDate, boolean[]> availableDates;
 }

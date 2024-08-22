@@ -30,7 +30,7 @@ public class Utils { // 빈의 이름 - utils
         // FieldError 객체를 가져와서 필드명을 key로, 오류 메시지를 리스트 형태로 value로 가지는 Map으로 변환
         Map<String, List<String>> messages = errors.getFieldErrors()
                 .stream()
-                .collect(Collectors.toMap(FieldError::getField, e -> getCodeMessages(e.getCodes())));
+                .collect(Collectors.toMap(FieldError::getField, e -> getCodeMessages(e.getCodes()), (p1, p2) -> p1));
 
         // GlobalErrors
         List<String> gMessages = errors.getGlobalErrors()

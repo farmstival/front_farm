@@ -18,7 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 
@@ -40,7 +45,7 @@ public class ActivityInfoService {
         Activity item = activityRepository.findById(seq).orElseThrow(ActivityNotFoundException::new);
 
 //        // 추가 정보 처리
-//        addInfo(item);
+        addInfo(item);
         return item;
     }
 
@@ -129,6 +134,24 @@ public class ActivityInfoService {
     }
 
     private void addInfo(Activity item) {
+        LocalDate startDate = LocalDate.now();
+        Map<LocalDate, boolean[]> availableDates = new HashMap<>();
+        int hours = LocalTime.now().getHour();
+        if (hours >= 12) { // 오후 시간이면 익일 예약 가능
+            startDate = startDate.plusDays(1L);
+            availableDates.put(startDate, new boolean[]{true, true});
+        } else { // 당일 예약
+            boolean[] time = hours > 8 ? new boolean[]{false, true} : new boolean[]{true, true};
+            availableDates.put(startDate, time);
+        }
+        LocalDate endDate = startDate.plusMonths(1L).minusDays(1L);
+        Period period = Period.between(startDate, endDate);
+        int days = period.getDays() + 1;
 
+        for (int i = 1; i <= days; i++) {
+            availableDates.put(startDate.plusDays(i), new boolean[]{true, true});
+        }
+
+        item.setAvailableDates(availableDates);
     }
 }
