@@ -8,10 +8,13 @@ import com.joyfarm.farmstival.board.entities.QBoardData;
 import com.joyfarm.farmstival.board.exceptions.BoardDataNotFoundException;
 import com.joyfarm.farmstival.board.exceptions.BoardNotFoundException;
 import com.joyfarm.farmstival.board.repositories.BoardDataRepository;
+import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
 import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.global.constants.DeleteStatus;
+import com.joyfarm.farmstival.wishlist.constants.WishType;
+import com.joyfarm.farmstival.wishlist.services.WishListService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -39,6 +42,7 @@ public class BoardInfoService {
     private final HttpServletRequest request;
     private final BoardConfigInfoService configInfoService;
     private final Utils utils;
+    private final WishListService wishListService;
 
     /**
      * 게시글 목록 조회
@@ -278,6 +282,48 @@ public class BoardInfoService {
     public RequestBoard getForm(BoardData item) {
         return getForm(item, DeleteStatus.UNDELETED);
     }
+
+    /**
+     * 내가 찜한 게시글 목록
+     *
+     * @param search
+     * @return
+     */
+    public ListData<BoardData> getWishList(CommonSearch search) {
+
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 10 : limit;
+        int offset = (page - 1) * limit;
+
+
+        List<Long> seqs = wishListService.getList(WishType.BOARD);
+        if (seqs == null || seqs.isEmpty()) {
+            return new ListData<>();
+        }
+
+        QBoardData boardData = QBoardData.boardData;
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(boardData.seq.in(seqs));
+
+        List<BoardData> items = queryFactory.selectFrom(boardData)
+                .where(andBuilder)
+                .leftJoin(boardData.board)
+                .fetchJoin()
+                .offset(offset)
+                .limit(limit)
+                .orderBy(boardData.createdAt.desc())
+                .fetch();
+
+        items.forEach(this::addInfo);
+
+        long total = repository.count(andBuilder);
+        Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
+
+        return new ListData<>(items, pagination);
+    }
+
+
 
     /**
      * 추가 데이터 처리
