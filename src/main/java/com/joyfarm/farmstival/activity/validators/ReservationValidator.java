@@ -29,21 +29,26 @@ public class ReservationValidator implements Validator {
         RequestReservation form = (RequestReservation) target;
 
         Long seq = form.getActivitySeq();
-        Activity item = infoService.get(seq);
-        Map<LocalDate, boolean[]> available = item.getAvailableDates();
+        Activity item = infoService.get(seq); //체험활동 seq 번호
+
+        //예약일 검증 S
+        Map<LocalDate, boolean[]> availableDates = item.getAvailableDates();
         LocalDate rDate = form.getRDate();
         String amPm = form.getAmpm();
 
-        String errorCode = "NotAvailable.activity";
-        if (!available.containsKey(rDate)) { // 예약 불가능 일정
+        String errorCode = "NotAvailable.reservation";
+        if (!availableDates.containsKey(rDate)) { //예약 가능한 일정이 없는 경우
             errors.rejectValue("rDate", errorCode);
-        } else { // 예약 가능 일정, 오전 오후 체크 - 선택한 날짜가 당일인 경우
-            int hours = LocalTime.now().getHour();
-            boolean[] time = available.get(rDate);
-            if (rDate.equals(LocalDate.now()) && hours > 8 && ((amPm.equals("AM") && !time[0] || (amPm.equals("PM") && !time[1])))) { // 당일 예약
-                errors.rejectValue("ampm", errorCode);
 
+        } else { //예약 가능한 일정일 경우 오전/오후 체크 - 선택한 날짜가 당일인 경우
+            int hours = LocalTime.now().getHour();
+            boolean[] time = availableDates.get(rDate);
+
+            // 당일 예약
+            if (rDate.equals(LocalDate.now()) && hours > 8 && ((amPm.equals("AM") && !time[0]) || (amPm.equals("PM") && !time[1]))) {
+                errors.rejectValue("ampm", errorCode);
             }
         }
+        //예약일 검증 E
     }
 }

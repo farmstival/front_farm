@@ -1,6 +1,5 @@
 package com.joyfarm.farmstival.activity.services;
 
-import com.joyfarm.farmstival.activity.constants.AM_PM;
 import com.joyfarm.farmstival.activity.controllers.ReservationSearch;
 import com.joyfarm.farmstival.activity.entities.QReservation;
 import com.joyfarm.farmstival.activity.entities.Reservation;
@@ -21,11 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Period;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +34,6 @@ public class ReservationInfoService {
 
     /**
      * 예약 상세 정보
-     *
      * @param seq
      * @return
      */
@@ -77,11 +71,11 @@ public class ReservationInfoService {
         LocalDate eDate = search.getEDate();
 
         List<Long> memberSeqs = search.getMemberSeqs(); //회원번호로 조회(본인의 예약 정보만 조회)
-
+        
         //검색 처리 S
         QReservation reservation = QReservation.reservation;
         BooleanBuilder andBuilder = new BooleanBuilder();
-
+        
         sopt = sopt != null && StringUtils.hasText(sopt.trim()) ? sopt.trim() : "ALL"; //통합 검색
         if (skey != null && StringUtils.hasText(skey.trim())) {
             /**
@@ -96,7 +90,7 @@ public class ReservationInfoService {
              *  ADDRESS
              *  ACTIVITY - 체험마을명 + 체험 프로그램명
              */
-
+            
             skey = skey.trim();
             StringExpression expression = null;
             if (sopt.equals("ALL")) { //통합 검색
@@ -117,16 +111,15 @@ public class ReservationInfoService {
                 expression = reservation.doroAddress;
             } else if (sopt.equals("ACTIVITY")) {
                 expression = reservation.activityName.concat(reservation.townName);
-            }
-            if (expression != null) {
+            } if (expression != null) {
                 andBuilder.and(expression.contains(skey)); //포함 조건
             }
         }
-
+        
         //예약일 검색
         if (sDate != null) { //예약 시작일 검색
             andBuilder.and(reservation.rDate.goe(sDate)); //시작일보다 크거나 같다
-
+            
         }
         if (eDate != null) { //예약 종료일 검색
             andBuilder.and(reservation.rDate.loe(eDate)); //종료일보다 작거나 같다
@@ -138,7 +131,7 @@ public class ReservationInfoService {
         }
 
         //검색 처리 E
-
+        
         //목록 데이터 가져오기
         List<Reservation> items = queryFactory.selectFrom(reservation)
                 .leftJoin(reservation.member) //시점 데이터가 있기 때문에 필요할 때 활동 데이터를 불러오기로 함
@@ -148,12 +141,12 @@ public class ReservationInfoService {
                 .limit(limit)
                 .orderBy(reservation.createdAt.desc()) //예약 등록일자 기준 정렬
                 .fetch();
-
+        
         long total = reservationRepository.count(andBuilder);
 
         //페이징 적용
         //int page, int total, int ranges, int limit, HttpServletRequest request
-        Pagination pagination = new Pagination(page, (int) total, 10, limit, request);
+        Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
         return new ListData<>(items, pagination);
     }
@@ -161,4 +154,6 @@ public class ReservationInfoService {
     private void addInfo(Reservation reservation) {
 
     }
+    
+
 }

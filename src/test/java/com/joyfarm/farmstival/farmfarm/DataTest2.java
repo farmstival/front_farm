@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joyfarm.farmstival.farmfarm.entities.Festival;
 import com.joyfarm.farmstival.farmfarm.repositories.FestivalRepository;
 import com.joyfarm.farmstival.global.rests.gov.api.ApiResult2;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,7 @@ public class DataTest2 {
     private String serviceKey = "0Sgv0AKMOayMo1mD5VMSUVb%2BUcFF8gNjLps7PmIgLMFiD8YDLAZ9NDzmF7863XkTC0DkRBCSzqM4RROiej%2BrIw%3D%3D";
 
     @Test
+    @DisplayName("Festvial-축제 정보 데이터(이미지 있는 데이터)")
     void test1(){
         String url = String.format("https://apis.data.go.kr/B551011/KorService1/searchFestival1?MobileOS=AND&MobileApp=test&_type=json&eventStartDate=20240101&serviceKey=%s&pageNo=%d&numOfRows=1000", serviceKey, 1);
 
@@ -69,6 +71,7 @@ public class DataTest2 {
     }
 
     @Test
+    @DisplayName("Festvial-축제 상세 정보 데이터 추가")
     void test2() throws Exception {
         File file = new File("D:/data/fest2.txt");
 
