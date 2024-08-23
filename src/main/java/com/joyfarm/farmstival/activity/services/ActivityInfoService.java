@@ -18,7 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 
@@ -39,8 +44,8 @@ public class ActivityInfoService {
     public Activity get(Long seq) {
         Activity item = activityRepository.findById(seq).orElseThrow(ActivityNotFoundException::new);
 
-//        // 추가 정보 처리
-//        addInfo(item);
+        // 추가 정보 처리
+        addInfo(item);
         return item;
     }
 
@@ -75,8 +80,10 @@ public class ActivityInfoService {
              *      ALL - 통합 검색
              *            townName(체험 마을명), activityName (체험프로그램명)
              *            doroAddress(주소), ownerName(대표자명), ownerTel(대표자 전화번호)
+             *      DIVISION - 프로그램구분
              *      ADDRESS - 도로명 주소
              *      ACTIVITY - 체험 마을명 + 체험프로그램명
+             *      FACILITYINFO - 보유시설정보
              */
 
             skey = skey.trim();
@@ -129,6 +136,27 @@ public class ActivityInfoService {
     }
 
     private void addInfo(Activity item) {
+        LocalDate startDate = LocalDate.now();
+        Map<LocalDate, boolean[]> availableDates = new HashMap<>();
+
+        int hours = LocalTime.now().getHour();
+        if (hours > 12) { //오후 시간이면 익일 예약 가능
+            startDate = startDate.plusDays(1L);
+            availableDates.put(startDate, new boolean[]{true, true});
+        } else { //당일 예약
+            boolean[] time = hours > 8 ? new boolean[] {false, true} : new boolean[]{true, true};
+            availableDates.put(startDate, time);
+        }
+
+        LocalDate endDate = startDate.plusMonths(1L).minusDays(1L);
+        Period period = Period.between(startDate, endDate);
+        int days = period.getDays() + 1;
+
+        for (int i = 1 ; i <= days; i++) {
+            availableDates.put(startDate.plusDays(i), new boolean[] {true, true});
+        }
+
+        item.setAvailableDates(availableDates);
 
     }
 }

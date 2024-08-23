@@ -18,7 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Activity extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long seq;
 
     @Column(length=150, nullable=false)
@@ -70,4 +70,5 @@ public class Activity extends BaseEntity {
 
     @Transient
     private Map<LocalDate, boolean[]> availableDates; // 예약가능한 날짜, 오전/오후
+
 }
