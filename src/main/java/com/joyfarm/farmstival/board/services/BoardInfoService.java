@@ -232,7 +232,7 @@ public class BoardInfoService {
         // 삭제, 미삭제 게시글 조회 처리
         if (status != DeleteStatus.ALL) {
             if (status == DeleteStatus.UNDELETED) {
-                andBuilder.and(boardData.deletedAt.isNull()); // 미삭된 게시글
+                andBuilder.and(boardData.deletedAt.isNull()); // 미삭제된 게시글
             } else {
                 andBuilder.and(boardData.deletedAt.isNotNull()); // 삭제된 게시글
             }
