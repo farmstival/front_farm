@@ -60,7 +60,9 @@ public class Reservation extends BaseEntity {
     private String ownerTel; //대표자 전화번호
     
     private LocalDate rDate; //예약 날짜
-    
+
+    @Column(length = 2)
+    @Enumerated(EnumType.STRING) 
     private AM_PM ampm; //오전, 오후 구분
     
     private int persons = 1; //예약 인원수
