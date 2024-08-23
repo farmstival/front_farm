@@ -154,6 +154,5 @@ public class ReservationInfoService {
     private void addInfo(Reservation reservation) {
 
     }
-    
 
 }
