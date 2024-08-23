@@ -2,10 +2,14 @@ package com.joyfarm.farmstival.activity.entities;
 
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -14,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Activity extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Column(length=150, nullable=false)
@@ -63,4 +67,7 @@ public class Activity extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<ActivityTag> acTags;
+
+    @Transient
+    private Map<LocalDate, boolean[]> availableDates; // 예약가능한 날짜, 오전/오후
 }
