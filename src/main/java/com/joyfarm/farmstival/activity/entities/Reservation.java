@@ -26,7 +26,7 @@ public class Reservation extends BaseEntity {
 
     private Long seq; //자동증감번호
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Member member; //한명이 여러 예약 가능
 
     @ManyToOne(fetch = FetchType.EAGER)
