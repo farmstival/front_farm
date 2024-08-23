@@ -1,7 +1,6 @@
 package com.joyfarm.farmstival.wishlist.controllers;
 
 import com.joyfarm.farmstival.global.rests.JSONData;
-import com.joyfarm.farmstival.wishlist.costants.WishType;
 import com.joyfarm.farmstival.wishlist.services.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,13 @@ import java.util.List;
 @RequestMapping("/wish")
 @RequiredArgsConstructor
 public class WishListController {
+
     private final WishListService service;
 
-    //찜하기 목록  카테고리별 조회
     @GetMapping("/{type}")
     public JSONData list(@PathVariable("type") String type) {
         List<Long> seqs = service.getList(WishType.valueOf(type));
+
         return new JSONData(seqs);
     }
 

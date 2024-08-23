@@ -21,7 +21,7 @@ public class WishList extends BaseEntity {
     private Long seq;
 
     @Id
-    @Column(length=20)
+    @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private WishType wishType;
 

@@ -98,11 +98,10 @@ public class BoardController {
         return new JSONData(item);
     }
 
-    @GetMapping("wish")
+    @GetMapping("/wish")
     @PreAuthorize("isAuthenticated()")
     public JSONData wishList(CommonSearch search) {
         ListData<BoardData> data = infoService.getWishList(search);
-
         return new JSONData(data);
     }
 }

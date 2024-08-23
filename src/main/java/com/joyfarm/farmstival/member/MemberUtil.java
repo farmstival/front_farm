@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberUtil {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepository repository;
 
     public boolean isLogin() {
         return getMember() != null;
@@ -35,7 +35,7 @@ public class MemberUtil {
 
         if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof MemberInfo memberInfo) {
 
-            Member member = memberRepository.findByEmail(memberInfo.getEmail()).orElse(null);
+            Member member =  repository.findByEmail(memberInfo.getEmail()).orElse(null);
             memberInfo.setMember(member);
 
             return member;
