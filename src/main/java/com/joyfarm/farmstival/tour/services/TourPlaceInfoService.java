@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.tour.services;
 
+import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
 import com.joyfarm.farmstival.global.Utils;
@@ -8,8 +9,11 @@ import com.joyfarm.farmstival.tour.entities.QTourPlace;
 import com.joyfarm.farmstival.tour.entities.TourPlace;
 import com.joyfarm.farmstival.tour.exceptions.TourPlaceNotFoundException;
 import com.joyfarm.farmstival.tour.repositories.TourPlaceRepository;
+import com.joyfarm.farmstival.wishlist.constants.WishType;
+import com.joyfarm.farmstival.wishlist.services.WishListService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +36,8 @@ public class TourPlaceInfoService {
     private final TourPlaceRepository repository;
     private final HttpServletRequest request;
     private final Utils utils;
+    private final WishListService wishListService;
+    private final JPAQueryFactory queryFactory;
 
     public ListData<TourPlace> getList (TourPlaceSearch search) {
         int page = Math.max(search.getPage(), 1); // max함수 : 두 수를 비교해서 큰 수를 반환한다(1 미만의 수가 들어왔을 때는 1로 대체)
@@ -121,5 +127,38 @@ public class TourPlaceInfoService {
         TourPlace item = repository.findById(seq).orElseThrow(TourPlaceNotFoundException::new);
 
         return item;
+    }
+
+    /**
+     * 찜한 여행지 목록
+     * @param search
+     * @return
+     */
+    public ListData<TourPlace> getWishList(CommonSearch search) {
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 10 : limit;
+
+        List<Long> seqs = wishListService.getList(WishType.TOUR);
+        if (seqs == null || seqs.isEmpty()) {
+            return new ListData<>(); // 오류 방지를 위함
+        }
+
+        QTourPlace tourPlace = QTourPlace.tourPlace;
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(tourPlace.seq.in(seqs));
+
+        /* 페이징 및 정렬 처리 */
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
+
+        /* 데이터 조회 */
+        Page<TourPlace> data = repository.findAll(andBuilder, pageable);
+
+        // Pagination 객체 만들기
+        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
+
+        List<TourPlace> items = data.getContent(); // 갯수에 맞게 조회된 데이터
+
+        return new ListData<>(items, pagination);
     }
 }

@@ -47,7 +47,7 @@ public class Reservation extends BaseEntity {
     @Column(length = 80)
     private String townName; //체험마을명
 
-    @Column(length = 100)
+    @Column(length = 1200)
     private String activityName; //체험프로그램명
 
     @Column(length = 100)
