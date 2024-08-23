@@ -1,10 +1,12 @@
 package com.joyfarm.farmstival.tour.controllers;
 
-import com.joyfarm.farmstival.tour.entities.TourPlace;
-import com.joyfarm.farmstival.tour.services.TourPlaceInfoService;
+import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.rests.JSONData;
+import com.joyfarm.farmstival.tour.entities.TourPlace;
+import com.joyfarm.farmstival.tour.services.TourPlaceInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,5 +40,12 @@ public class TourPlaceController {
     public JSONData info(@PathVariable("seq") Long seq) {
         TourPlace item = infoService.get(seq);
         return new JSONData(item);
+    }
+
+    @GetMapping("/wish")
+    @PreAuthorize("isAuthenticated()")
+    public JSONData wishList(@ModelAttribute CommonSearch search) {
+        ListData<TourPlace> data = infoService.getWishList(search);
+        return new JSONData(data);
     }
 }
