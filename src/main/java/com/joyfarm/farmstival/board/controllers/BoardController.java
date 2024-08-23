@@ -8,6 +8,7 @@ import com.joyfarm.farmstival.board.services.BoardDeleteService;
 import com.joyfarm.farmstival.board.services.BoardInfoService;
 import com.joyfarm.farmstival.board.services.BoardSaveService;
 import com.joyfarm.farmstival.board.validators.BoardValidator;
+import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Utils;
 import com.joyfarm.farmstival.global.exceptions.BadRequestException;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +96,13 @@ public class BoardController {
         BoardData item = deleteService.delete(seq);
 
         return new JSONData(item);
+    }
+
+    @GetMapping("wish")
+    @PreAuthorize("isAuthenticated()")
+    public JSONData wishList(CommonSearch search) {
+        ListData<BoardData> data = infoService.getWishList(search);
+
+        return new JSONData(data);
     }
 }

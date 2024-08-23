@@ -5,8 +5,11 @@ import com.joyfarm.farmstival.activity.entities.Activity;
 import com.joyfarm.farmstival.activity.entities.QActivity;
 import com.joyfarm.farmstival.activity.exceptions.ActivityNotFoundException;
 import com.joyfarm.farmstival.activity.repositories.ActivityRepository;
+import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
+import com.joyfarm.farmstival.wishlist.costants.WishType;
+import com.joyfarm.farmstival.wishlist.services.WishListService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +38,7 @@ public class ActivityInfoService {
     private final HttpServletRequest request;
     private final ActivityRepository activityRepository;
     //private final JPAQueryFactory queryFactory; //infoService 쓰게 되면 순환 참조 발생
+    private final WishListService wishListService;
 
     /**
      * 액티비티 상세 조회
@@ -58,7 +62,7 @@ public class ActivityInfoService {
         int page =Math.max(search.getPage(), 1); //둘 중에 큰 것을 반환
         int limit = search.getLimit(); //한 페이지 당 보여줄 레코드 개수
 
-        limit = limit < 1 ? 20 : limit;
+        limit = limit < 1 ? 20 : limit; //리액트에서 요청한 개수로 대체됨
         int offset = (page - 1) * limit; //레코드 시작 위치, (현재 페이지-1)*limit
 
         String sopt = search.getSopt(); //검색 옵션 All - 통합 검색
@@ -135,6 +139,37 @@ public class ActivityInfoService {
         return new ListData<>(items, pagination);
     }
 
+    //위시리스트
+    public ListData<Activity> getWishList(CommonSearch search) {
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 10: limit;
+        int offset = (page - 1) * limit;
+
+        List<Long> seqs = wishListService.getList(WishType.ACTIVITY);
+        if(seqs == null || seqs.isEmpty()) {
+            return new ListData<>();
+        }
+
+        QActivity activity = QActivity.activity;
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(activity.seq.in(seqs));
+
+        //페이징 및 정렬 처리
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
+
+        //데이터 조회
+        Page<Activity> data = activityRepository.findAll(andBuilder, pageable);
+
+        //pagination 객체 생성
+        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
+
+        List<Activity> items = data.getContent();
+
+        return new ListData<>(items, pagination);
+    }
+
+    //추가 데이터 처리
     private void addInfo(Activity item) {
         LocalDate startDate = LocalDate.now();
         Map<LocalDate, boolean[]> availableDates = new HashMap<>();

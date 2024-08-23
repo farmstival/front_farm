@@ -28,7 +28,7 @@ public class Reservation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member; //한명이 여러 예약 가능
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Activity activity;
     
     @Column(length = 10)
@@ -47,7 +47,7 @@ public class Reservation extends BaseEntity {
     @Column(length = 80)
     private String townName; //체험마을명
 
-    @Column(length = 100)
+    @Column(length = 1200)
     private String activityName; //체험프로그램명
 
     @Column(length = 100)
@@ -65,5 +65,5 @@ public class Reservation extends BaseEntity {
     @Enumerated(EnumType.STRING) 
     private AM_PM ampm; //오전, 오후 구분
     
-    private int persons = 1; //예약 인원수
+    private int persons = 1; //예약 인원수, 기본값 1명 반영 안됨..
 }
