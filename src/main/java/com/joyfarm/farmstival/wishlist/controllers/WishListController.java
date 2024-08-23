@@ -1,6 +1,7 @@
 package com.joyfarm.farmstival.wishlist.controllers;
 
 import com.joyfarm.farmstival.global.rests.JSONData;
+import com.joyfarm.farmstival.wishlist.constants.WishType;
 import com.joyfarm.farmstival.wishlist.services.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

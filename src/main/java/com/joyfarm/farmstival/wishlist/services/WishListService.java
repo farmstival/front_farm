@@ -32,6 +32,8 @@ public class WishListService {
                 .seq(seq)
                 .member(memberUtil.getMember())
                 .build();
+
+        System.out.println("wishList : " + wishList);
         repository.saveAndFlush(wishList);
     }
 

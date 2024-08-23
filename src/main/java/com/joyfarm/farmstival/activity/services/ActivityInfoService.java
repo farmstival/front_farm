@@ -8,7 +8,7 @@ import com.joyfarm.farmstival.activity.repositories.ActivityRepository;
 import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
-import com.joyfarm.farmstival.wishlist.costants.WishType;
+import com.joyfarm.farmstival.wishlist.constants.WishType;
 import com.joyfarm.farmstival.wishlist.services.WishListService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
@@ -130,11 +130,10 @@ public class ActivityInfoService {
         //데이터 조회
         Page<Activity> data = activityRepository.findAll(andBuilder, pageable);
 
-        List<Activity> items = data.getContent(); // 갯수에 맞게 조회된 데이터
-        items.forEach(this::addInfo);
-
         //pagination 객체 생성
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
+
+        List<Activity> items = data.getContent(); // 갯수에 맞게 조회된 데이터
 
         return new ListData<>(items, pagination);
     }
@@ -144,7 +143,6 @@ public class ActivityInfoService {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 10: limit;
-        int offset = (page - 1) * limit;
 
         List<Long> seqs = wishListService.getList(WishType.ACTIVITY);
         if(seqs == null || seqs.isEmpty()) {
