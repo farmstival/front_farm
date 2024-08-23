@@ -49,7 +49,7 @@ public class ReservationApplyService {
         reservationRepository.saveAndFlush(reservation);
 
 
-        //예약 접수 상태로 변경
+        //예약 상태로 변경
         statusService.change(reservation.getSeq(), Status.APPLY);
 
         return reservation;
