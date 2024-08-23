@@ -15,7 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Activity extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Column(length=150, nullable=false)
@@ -65,6 +65,7 @@ public class Activity extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<ActivityTag> acTags;
 
-    @Transient // 날짜가 들어가고 true, false로 오전 오후 구분
-    private Map<LocalDate, boolean[]> availableDates;
+    @Transient
+    private Map<LocalDate, boolean[]> availableDates; // 예약가능한 날짜, 오전/오후
+
 }
