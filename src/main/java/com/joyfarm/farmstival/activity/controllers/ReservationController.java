@@ -31,12 +31,12 @@ public class ReservationController {
     }
 
     //상세정보 조회
-    @GetMapping("/info/{seq}")
-    public JSONData info(@PathVariable("seq") Long seq) {
-        Reservation reservation = infoService.get(seq, true);
-
-        return new JSONData(reservation);
-    }
+//    @GetMapping("/info/{seq}")
+//    public JSONData info(@PathVariable("seq") Long seq) {
+//        Reservation reservation = infoService.get(seq, true);
+//
+//        return new JSONData(reservation);
+//    }
 
     //관리자가 조회할 때
     @GetMapping("/admin/list")

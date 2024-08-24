@@ -39,7 +39,7 @@ public class BoardDeleteService {
      */
     @Transactional
     public BoardData complete(Long seq){
-        BoardData data = infoService.get(seq, DeleteStatus.All);
+        BoardData data = infoService.get(seq, DeleteStatus.ALL);
 
         String gid = data.getGid();
 
