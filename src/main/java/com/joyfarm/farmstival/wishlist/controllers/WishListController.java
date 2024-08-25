@@ -24,7 +24,7 @@ public class WishListController {
         return new JSONData(seqs);
     }
 
-    // 추가
+    //추가
     @GetMapping("/{type}/{seq}")
     public ResponseEntity<Void> add(@PathVariable("type") String type, @PathVariable("seq") Long seq) {
 
@@ -33,7 +33,7 @@ public class WishListController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 삭제
+    //삭제
     @DeleteMapping("/{type}/{seq}")
     public ResponseEntity<Void> remove(@PathVariable("type") String type, @PathVariable("seq") Long seq) {
         service.remove(seq, WishType.valueOf(type));
