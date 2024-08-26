@@ -27,7 +27,7 @@ public class BoardValidator implements Validator, PasswordValidator {
 
         String bid = form.getBid();
         Long seq = form.getSeq();
-        if (seq == null && StringUtils.hasText(bid)) {
+        if (seq == null && !StringUtils.hasText(bid)) {
             errors.rejectValue("bid", "NotBlank");
         }
 

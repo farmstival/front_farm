@@ -1,13 +1,16 @@
 package com.joyfarm.farmstival.board.services;
 
+
 import com.joyfarm.farmstival.board.controllers.BoardDataSearch;
 import com.joyfarm.farmstival.board.controllers.RequestBoard;
 import com.joyfarm.farmstival.board.entities.Board;
 import com.joyfarm.farmstival.board.entities.BoardData;
+import com.joyfarm.farmstival.board.entities.CommentData;
 import com.joyfarm.farmstival.board.entities.QBoardData;
 import com.joyfarm.farmstival.board.exceptions.BoardDataNotFoundException;
 import com.joyfarm.farmstival.board.exceptions.BoardNotFoundException;
 import com.joyfarm.farmstival.board.repositories.BoardDataRepository;
+import com.joyfarm.farmstival.board.services.comment.CommentInfoService;
 import com.joyfarm.farmstival.file.entities.FileInfo;
 import com.joyfarm.farmstival.file.services.FileInfoService;
 import com.joyfarm.farmstival.global.CommonSearch;
@@ -48,6 +51,8 @@ public class BoardInfoService {
     private final BoardConfigInfoService configInfoService;
     private final FileInfoService fileInfoService;
     private final WishListService wishListService;
+    private final CommentInfoService commentInfoService;
+
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final Utils utils;
@@ -251,6 +256,10 @@ public class BoardInfoService {
 
         // 추가 데이터 처리
         addInfo(item);
+
+        // 댓글목록 추가 처리
+        List<CommentData> comments = commentInfoService.getList(seq);
+        item.setComments(comments);
 
         return item;
     }
