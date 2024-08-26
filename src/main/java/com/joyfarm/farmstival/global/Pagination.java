@@ -1,6 +1,5 @@
 package com.joyfarm.farmstival.global;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.util.StringUtils;
@@ -101,7 +100,7 @@ public class Pagination {
         this(page, total, ranges, limit, null);
     }
 
-    @JsonIgnore
+//    @JsonIgnore //length reading 불가로 리스트 출력 안됨 -> 임시로 주석 처리
     public List<String[]> getPages() {
         // 0 : 페이지 번호, 1 : 페이지 URL - ?page=페이지번호
 
