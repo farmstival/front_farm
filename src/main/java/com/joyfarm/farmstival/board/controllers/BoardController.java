@@ -3,10 +3,8 @@ package com.joyfarm.farmstival.board.controllers;
 import com.joyfarm.farmstival.board.entities.Board;
 import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.exceptions.BoardNotFoundException;
-import com.joyfarm.farmstival.board.services.BoardConfigInfoService;
-import com.joyfarm.farmstival.board.services.BoardDeleteService;
-import com.joyfarm.farmstival.board.services.BoardInfoService;
-import com.joyfarm.farmstival.board.services.BoardSaveService;
+import com.joyfarm.farmstival.board.services.*;
+import com.joyfarm.farmstival.board.services.comment.CommentInfoService;
 import com.joyfarm.farmstival.board.validators.BoardValidator;
 import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
@@ -29,6 +27,8 @@ public class BoardController {
     private final BoardInfoService infoService;
     private final BoardSaveService saveService;
     private final BoardDeleteService deleteService;
+    private final BoardViewCountService viewCountService;
+    private final CommentInfoService commentInfoService;
     private final BoardValidator validator;
     private final Utils utils;
     
@@ -80,6 +80,8 @@ public class BoardController {
     @GetMapping("/info/{seq}")
     public JSONData info(@PathVariable("seq") Long seq) {
         BoardData item = infoService.get(seq);
+
+        viewCountService.update(seq); //조회수 카운트
 
         return new JSONData(item);
     }

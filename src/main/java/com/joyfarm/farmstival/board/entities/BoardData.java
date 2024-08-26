@@ -1,5 +1,7 @@
 package com.joyfarm.farmstival.board.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.joyfarm.farmstival.file.entities.FileInfo;
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import com.joyfarm.farmstival.member.entities.Member;
 import jakarta.persistence.*;
@@ -7,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -46,6 +50,8 @@ public class BoardData extends BaseEntity { //게시글 데이터
     private String content; // 내용
 
     private int viewCount; //조회수
+    private int commentCount; //댓글수
+
     private boolean editorView; //에디터 사용여부에 따라 다르게 출력
 
     @Column(length = 20, updatable = false)
@@ -68,4 +74,34 @@ public class BoardData extends BaseEntity { //게시글 데이터
     private String longText1; //여러줄 텍스트 추가 필드1
     @Lob
     private String longText2; //여러줄 텍스트 추가 필드2
+
+
+    @Transient // 에디터 첨부 이미지 파일 목록
+    private List<FileInfo> editorImages;
+
+    @Transient // 첨부 파일 목록
+    private List<FileInfo> attachFiles;
+
+    @Transient
+    private boolean editable; // 수정, 삭제 가능 여부
+
+    @Transient
+    private boolean commentable; // 댓글 작성 가능 여부
+
+    @Transient
+    private boolean showEdit; // 글쓰기,수정 버튼 노출 여부
+
+    @Transient
+    private boolean showDelete; // 글삭제 버튼 노출 여부
+
+    @Transient
+    private boolean showList; // 글목록 버튼 노출 여부
+
+    @Transient
+    private boolean mine; // 게시글 소유자
+
+
+    @Transient
+    @JsonIgnore
+    private List<CommentData> comments; // 댓글 목록
 }

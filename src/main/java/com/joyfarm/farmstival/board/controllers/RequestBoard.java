@@ -36,7 +36,6 @@ public class RequestBoard { //커맨드객체
 
     private String longText1; //추가 필드 여러줄
     private String longText2;
-    private String longText3;
 
     private List<FileInfo> editorImages;
     private List<FileInfo> attachFiles;
