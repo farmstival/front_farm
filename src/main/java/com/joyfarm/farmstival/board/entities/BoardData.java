@@ -100,7 +100,6 @@ public class BoardData extends BaseEntity { //게시글 데이터
     @Transient
     private boolean mine; // 게시글 소유자
 
-
     @Transient
     @JsonIgnore
     private List<CommentData> comments; // 댓글 목록

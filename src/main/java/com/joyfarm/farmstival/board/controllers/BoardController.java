@@ -31,7 +31,7 @@ public class BoardController {
     private final CommentInfoService commentInfoService;
     private final BoardValidator validator;
     private final Utils utils;
-    
+
     // 게시판 설정
     @GetMapping("/config/{bid}")
     public JSONData getConfig(@PathVariable("bid") String bid) {
@@ -41,7 +41,7 @@ public class BoardController {
         return new JSONData(board);
     }
 
-    // 글 작성
+    // 글쓰기
     @PostMapping("/write/{bid}")
     public ResponseEntity<JSONData> write(@PathVariable("bid") String bid, @RequestBody @Valid RequestBoard form, Errors errors) {
         form.setBid(bid);
@@ -81,7 +81,7 @@ public class BoardController {
     public JSONData info(@PathVariable("seq") Long seq) {
         BoardData item = infoService.get(seq);
 
-        viewCountService.update(seq); //조회수 카운트
+        viewCountService.update(seq); // 조회수 카운트
 
         return new JSONData(item);
     }
@@ -104,6 +104,7 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     public JSONData wishList(CommonSearch search) {
         ListData<BoardData> data = infoService.getWishList(search);
+
         return new JSONData(data);
     }
 }

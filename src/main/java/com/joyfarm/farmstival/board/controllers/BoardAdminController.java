@@ -2,12 +2,14 @@ package com.joyfarm.farmstival.board.controllers;
 
 import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.services.BoardInfoService;
+import com.joyfarm.farmstival.board.services.admin.BoardAdminService;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.constants.DeleteStatus;
 import com.joyfarm.farmstival.global.rests.JSONData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/board/admin")
@@ -15,16 +17,27 @@ import org.springframework.web.bind.annotation.*;
 public class BoardAdminController {
 
     private final BoardInfoService boardInfoService;
+    private final BoardAdminService boardAdminService;
 
-    @GetMapping("/search")
+    @GetMapping //목록 조회
     public JSONData getList(BoardDataSearch search){
         ListData<BoardData> data = boardInfoService.getList(search, DeleteStatus.ALL);
 
         return new JSONData(data);
     }
-    @PatchMapping
-    public ResponseEntity<Void> listUpdate(@RequestBody RequestAdminList form){
-        return ResponseEntity.ok().build();
+    @PatchMapping("/{mode}") //목록 수정, 삭제
+    public JSONData updateList(@PathVariable("mode") String mode, @RequestBody RequestAdminList form){
+        List<BoardData> items = boardAdminService.update(mode,form.getItems());
+
+
+        return new JSONData(items);
+    }
+
+    @PatchMapping("/{mode}/{seq}") // 게시글 하나 수정, 삭제
+    public JSONData update(@PathVariable("mode") String mode, @PathVariable("seq") Long seq, RequestBoard form){
+        form.setSeq(seq);
+        BoardData item = boardAdminService.update(mode,form);
+        return new JSONData(item);
     }
 
     @GetMapping("/info/{seq}")
