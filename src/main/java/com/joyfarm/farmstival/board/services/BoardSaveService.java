@@ -25,6 +25,7 @@ public class BoardSaveService {
     private final PasswordEncoder encoder;
     private final BoardConfigInfoService configInfoService;
     private final BoardDataRepository boardDataRepository;
+    private final BoardInfoService infoService;
     private final MemberUtil memberUtil;
     private final FileUploadDoneService doneService;
 
@@ -87,6 +88,6 @@ public class BoardSaveService {
         // 파일 업로드 완료 처리
         doneService.process(gid);
 
-        return data;
+        return infoService.get(data.getSeq());
     }
 }

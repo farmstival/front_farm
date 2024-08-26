@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.board.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.joyfarm.farmstival.file.entities.FileInfo;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.Data;
 import java.util.List;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class RequestBoard {
     private Long seq; // 글 번호 - 글 수정시 필요
