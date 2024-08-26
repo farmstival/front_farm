@@ -5,9 +5,12 @@ import com.joyfarm.farmstival.farmfarm.entities.Festival;
 import com.joyfarm.farmstival.farmfarm.entities.QFestival;
 import com.joyfarm.farmstival.farmfarm.exceptions.FestivalNotFoundException;
 import com.joyfarm.farmstival.farmfarm.repositories.FestivalRepository;
+import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
 import com.joyfarm.farmstival.global.Utils;
+import com.joyfarm.farmstival.wishlist.constants.WishType;
+import com.joyfarm.farmstival.wishlist.services.WishListService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +34,7 @@ public class FestivalInfoService {
     private final HttpServletRequest request;
     private final FestivalRepository repository;
     private final Utils utils;
+    private final WishListService wishListService;
     //private final JPAQueryFactory queryFactory; //infoService 쓰게 되면 순환 참조 발생
 
     /* 축제 목록 조회 */
@@ -106,5 +110,38 @@ public class FestivalInfoService {
         // 추가 데이터 처리
 
         return item;
+    }
+
+    /**
+     * 찜한 여행지 목록
+     * @param search
+     * @return
+     */
+    public ListData<Festival> getWishList(CommonSearch search) {
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 10 : limit;
+
+        List<Long> seqs = wishListService.getList(WishType.FESTIVAL);
+        if (seqs == null || seqs.isEmpty()) {
+            return new ListData<>(); // 오류 방지를 위함
+        }
+
+        QFestival festival =  QFestival.festival;
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(festival.seq.in(seqs));
+
+        /* 페이징 및 정렬 처리 */
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
+
+        /* 데이터 조회 */
+        Page<Festival> data = repository.findAll(andBuilder, pageable);
+
+        // Pagination 객체 만들기
+        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
+
+        List<Festival> items = data.getContent(); // 갯수에 맞게 조회된 데이터
+
+        return new ListData<>(items, pagination);
     }
 }
