@@ -8,6 +8,7 @@ import com.joyfarm.farmstival.member.entities.Member;
 import com.joyfarm.farmstival.member.jwt.TokenProvider;
 import com.joyfarm.farmstival.member.services.MemberSaveService;
 import com.joyfarm.farmstival.member.validators.JoinValidator;
+import com.joyfarm.farmstival.member.validators.UpdateValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +27,9 @@ public class MemberController {
 
     private final JoinValidator joinValidator;
     private final MemberSaveService saveService;
-    //private final MemberInfo memberInfo;
     private final Utils utils;
     private final TokenProvider tokenProvider;
+    private final UpdateValidator updateValidator;
 
     /* 로그인한 회원 정보 조회 */
     @GetMapping
@@ -77,17 +78,20 @@ public class MemberController {
     public void adminOnly() {
         log.info("관리자 전용!");
     }
-    /*
-    @PutMapping("/update")
+
+
+    @PatchMapping("/update")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity update(@RequestBody @Valid RequestUpdate form, Errors errors, @AuthenticationPrincipal MemberInfo memberInfo) {
+    public ResponseEntity update(@RequestBody @Valid RequestUpdate form, Errors errors) {
+
+        updateValidator.validate(form, errors);
+
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
-        Member member = memberInfo.getMember();
-        saveService.updateMember(member, form);
+        saveService.updateMember(form);
 
         return ResponseEntity.ok().build();
-    }*/
+    }
 }
