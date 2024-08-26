@@ -23,7 +23,6 @@ public class Reservation extends BaseEntity {
     //해당 시점의 데이터를 기록
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long seq; //자동증감번호
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -48,7 +47,7 @@ public class Reservation extends BaseEntity {
     @Column(length = 80)
     private String townName; //체험마을명
 
-    @Column(length = 100)
+    @Column
     private String activityName; //체험프로그램명
 
     @Column(length = 100)

@@ -72,11 +72,11 @@ public class ActivityInfoService {
         String sigungu = search.getSigungu(); // 시도에 종속적인 데이터이므로 시도가 있을 때 부가적으로 조회 가능
 
         sopt = StringUtils.hasText(sopt) ? sopt : "ALL"; // 통합 검색이 기본
-        
+
         /* 액티비티 검색 처리 S */
         QActivity activity = QActivity.activity;
         BooleanBuilder andBuilder = new BooleanBuilder();
-        
+
         sopt = sopt != null && StringUtils.hasText(sopt.trim()) ? sopt.trim() : "ALL";
         if (skey != null && StringUtils.hasText(skey.trim())) {
             /**
@@ -96,8 +96,7 @@ public class ActivityInfoService {
                 expression = activity.townName
                         .concat(activity.activityName)
                         .concat(activity.doroAddress)
-                        .concat(activity.ownerName)
-                        .concat(activity.ownerTel);
+                        .concat(activity.ownerName);
             } else if (sopt.equals("DIVISION")) {
                 expression = activity.division;
             } else if (sopt.equals("ADDRESS")) {
@@ -123,10 +122,10 @@ public class ActivityInfoService {
         } // endif - sido
 
         /* 액티비티 검색 처리 E */
-        
+
         //페이징 및 정렬 처리
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
-        
+
         //데이터 조회
         Page<Activity> data = activityRepository.findAll(andBuilder, pageable);
 

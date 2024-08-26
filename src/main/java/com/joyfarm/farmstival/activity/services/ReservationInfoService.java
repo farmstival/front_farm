@@ -33,7 +33,7 @@ public class ReservationInfoService {
     private final MemberUtil memberUtil;
 
     /**
-     * 예약 상세 정보
+     * 예약 상세 정보 조회
      * @param seq
      * @return
      */
@@ -57,11 +57,11 @@ public class ReservationInfoService {
         return reservation;
     }
 
+    //예약 목록 조회
     public ListData<Reservation> getList(ReservationSearch search) {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
-
         int offset = (page - 1) * limit;
 
         String sopt = search.getSopt();
@@ -71,11 +71,11 @@ public class ReservationInfoService {
         LocalDate eDate = search.getEDate();
 
         List<Long> memberSeqs = search.getMemberSeqs(); //회원번호로 조회(본인의 예약 정보만 조회)
-        
+
         //검색 처리 S
         QReservation reservation = QReservation.reservation;
         BooleanBuilder andBuilder = new BooleanBuilder();
-        
+
         sopt = sopt != null && StringUtils.hasText(sopt.trim()) ? sopt.trim() : "ALL"; //통합 검색
         if (skey != null && StringUtils.hasText(skey.trim())) {
             /**
@@ -90,23 +90,14 @@ public class ReservationInfoService {
              *  ADDRESS
              *  ACTIVITY - 체험마을명 + 체험 프로그램명
              */
-            
+
             skey = skey.trim();
             StringExpression expression = null;
             if (sopt.equals("ALL")) { //통합 검색
-                expression = reservation.name.concat(reservation.email)
-                        .concat(reservation.mobile) //숫자만 가지고 검색해야 함->차후 수정
-                        .concat(reservation.townName)
+                expression = reservation.townName
                         .concat(reservation.activityName)
                         .concat(reservation.doroAddress)
-                        .concat(reservation.ownerName)
-                        .concat(reservation.ownerTel);
-            } else if (sopt.equals("NAME")) {
-                expression = reservation.name.concat(reservation.ownerName);
-            } else if (sopt.equals("EMAIL")) {
-                expression = reservation.email;
-            } else if (sopt.equals("MOBILE")) {
-                expression = reservation.mobile.concat(reservation.ownerTel);
+                        .concat(reservation.ownerName);
             } else if (sopt.equals("ADDRESS")) {
                 expression = reservation.doroAddress;
             } else if (sopt.equals("ACTIVITY")) {
@@ -115,11 +106,11 @@ public class ReservationInfoService {
                 andBuilder.and(expression.contains(skey)); //포함 조건
             }
         }
-        
+
         //예약일 검색
         if (sDate != null) { //예약 시작일 검색
             andBuilder.and(reservation.rDate.goe(sDate)); //시작일보다 크거나 같다
-            
+
         }
         if (eDate != null) { //예약 종료일 검색
             andBuilder.and(reservation.rDate.loe(eDate)); //종료일보다 작거나 같다
@@ -131,7 +122,7 @@ public class ReservationInfoService {
         }
 
         //검색 처리 E
-        
+
         //목록 데이터 가져오기
         List<Reservation> items = queryFactory.selectFrom(reservation)
                 .leftJoin(reservation.member) //시점 데이터가 있기 때문에 필요할 때 활동 데이터를 불러오기로 함
@@ -141,11 +132,10 @@ public class ReservationInfoService {
                 .limit(limit)
                 .orderBy(reservation.createdAt.desc()) //예약 등록일자 기준 정렬
                 .fetch();
-        
+
         long total = reservationRepository.count(andBuilder);
 
-        //페이징 적용
-        //int page, int total, int ranges, int limit, HttpServletRequest request
+        //pagination 객체 생성
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
         return new ListData<>(items, pagination);

@@ -11,6 +11,7 @@ import com.joyfarm.farmstival.activity.repositories.ReservationRepository;
 import com.joyfarm.farmstival.member.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -21,6 +22,7 @@ public class ReservationApplyService {
     private final ReservationStatusService statusService;
     private final MemberUtil memberUtil;
 
+    @Transactional
     public Reservation apply(RequestReservation form) {
         Long activitySeq = form.getActivitySeq();
         Activity activity = activityRepository.findById(activitySeq).orElseThrow(ActivityNotFoundException::new);
