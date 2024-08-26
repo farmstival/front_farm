@@ -39,6 +39,8 @@ public class ReservationApplyService {
                 .activityName(activity.getActivityName())
                 .townName(activity.getTownName())
                 .doroAddress(activity.getDoroAddress())
+                .latitude(activity.getLatitude())
+                .longitude(activity.getLongitude())
                 .ownerName(activity.getOwnerName())
                 .ownerTel(activity.getOwnerTel())
                 .rDate(form.getRDate())

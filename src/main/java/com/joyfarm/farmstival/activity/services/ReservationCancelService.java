@@ -3,7 +3,6 @@ package com.joyfarm.farmstival.activity.services;
 import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.activity.entities.Reservation;
 import com.joyfarm.farmstival.activity.repositories.ReservationRepository;
-import com.joyfarm.farmstival.member.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ public class ReservationCancelService {
     private final ReservationRepository reservationRepository;
     private final ReservationStatusService statusService;
     private final ReservationInfoService infoService;
-    private final MemberUtil memberUtil;
 
     public Reservation cancel(Long seq) {
         Reservation data = infoService.get(seq);

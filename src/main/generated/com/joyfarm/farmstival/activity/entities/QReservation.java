@@ -40,6 +40,10 @@ public class QReservation extends EntityPathBase<Reservation> {
 
     public final StringPath email = createString("email");
 
+    public final NumberPath<Double> latitude = createNumber("latitude", Double.class);
+
+    public final NumberPath<Double> longitude = createNumber("longitude", Double.class);
+
     public final com.joyfarm.farmstival.member.entities.QMember member;
 
     public final StringPath mobile = createString("mobile");
