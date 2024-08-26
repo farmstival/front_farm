@@ -80,7 +80,7 @@ public class MemberController {
     }
 
 
-    @PatchMapping("/update")
+    @PutMapping("/update")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity update(@RequestBody @Valid RequestUpdate form, Errors errors) {
 
