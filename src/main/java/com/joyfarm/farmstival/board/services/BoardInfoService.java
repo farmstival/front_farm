@@ -62,7 +62,8 @@ public class BoardInfoService {
 
         int offset = (page - 1) * limit;
 
-        status = Objects.requireNonNullElse(status,DeleteStatus.UNDELETED); //삭제가 되지 않은 게시글 목록이 기본값
+        // 삭제가 되지 않은 게시글 목록이 기본 값
+        status = Objects.requireNonNullElse(status, DeleteStatus.UNDELETED);
 
         String sopt = search.getSopt(); //검색 옵션
         String skey = search.getSkey(); //검색 키워드
@@ -72,11 +73,11 @@ public class BoardInfoService {
         QBoardData boardData = QBoardData.boardData;
         BooleanBuilder andBuilder = new BooleanBuilder();
 
-        //삭제, 미삭제 게시글 조회 처리
-        if(status != DeleteStatus.All){
-            if(status == DeleteStatus.UNDELETED){
+        // 삭제, 미삭제 게시글 조회 처리
+        if (status != DeleteStatus.ALL) {
+            if (status == DeleteStatus.UNDELETED) {
                 andBuilder.and(boardData.deletedAt.isNull()); // 미삭제된 게시글
-            }else {
+            } else {
                 andBuilder.and(boardData.deletedAt.isNotNull()); // 삭제된 게시글
             }
         }
@@ -105,15 +106,14 @@ public class BoardInfoService {
 
             BooleanBuilder orBuilder = new BooleanBuilder();
 
-
-            /* 이름 검색  S */
+            /* 이름 검색 S */
             BooleanBuilder nameCondition = new BooleanBuilder();
             nameCondition.or(boardData.poster.contains(skey));
 
             if(boardData.member != null){
                 nameCondition.or(boardData.member.userName.contains(skey));
             }
-            /* 이름 검색  E */
+            /* 이름 검색 E */
 
 
             if(sopt.equals("ALL")){ //통합 검색
@@ -132,7 +132,7 @@ public class BoardInfoService {
                 andBuilder.and(nameCondition);
             }
 
-            if(condition != null) andBuilder.and(condition);
+            if (condition != null) andBuilder.and(condition);
             andBuilder.and(orBuilder);
         }
         /* 검색 처리E */
@@ -229,11 +229,11 @@ public class BoardInfoService {
         QBoardData boardData = QBoardData.boardData;
         andBuilder.and(boardData.seq.eq(seq));
 
-        //삭제, 미삭제 게시글 조회 처리
-        if(status != DeleteStatus.All){
-            if(status == DeleteStatus.UNDELETED){
+        // 삭제, 미삭제 게시글 조회 처리
+        if (status != DeleteStatus.ALL) {
+            if (status == DeleteStatus.UNDELETED) {
                 andBuilder.and(boardData.deletedAt.isNull()); // 미삭제된 게시글
-            }else {
+            } else {
                 andBuilder.and(boardData.deletedAt.isNotNull()); // 삭제된 게시글
             }
         }
@@ -246,8 +246,8 @@ public class BoardInfoService {
                 .where(andBuilder)
                 .fetchFirst();
 
-        if(item == null){
-            throw  new BoardDataNotFoundException();
+        if (item == null) {
+            throw new BoardDataNotFoundException();
         }
 
         //추가 데이터 처리
@@ -272,7 +272,7 @@ public class BoardInfoService {
     }
 
     public RequestBoard getForm(BoardData item, DeleteStatus status){
-        return new ModelMapper().map(item,RequestBoard.class); // 같은 getter,setter 메서드가 있으면 데이터 치환
+        return new ModelMapper().map(item, RequestBoard.class); // 같은 getter,setter 메서드가 있으면 데이터 치환
     }
 
     public RequestBoard getForm(Long seq) {

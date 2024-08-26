@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @IdClass(WishListId.class)
 public class WishList extends BaseEntity {
+
     @Id
     private Long seq;
 

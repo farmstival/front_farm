@@ -18,9 +18,10 @@ import static org.springframework.data.domain.Sort.Order.desc;
 @Service
 @RequiredArgsConstructor
 public class WishListService {
+
     private final MemberUtil memberUtil;
     private final WishListRepository repository;
-    
+
     public void add(Long seq, WishType type) { // 추가
         if (!memberUtil.isLogin()) {
             return;
@@ -31,9 +32,11 @@ public class WishListService {
                 .seq(seq)
                 .member(memberUtil.getMember())
                 .build();
+
+        System.out.println("wishList : " + wishList);
         repository.saveAndFlush(wishList);
     }
-    
+
     public void remove(Long seq, WishType type) { // 제거
         if (!memberUtil.isLogin()) {
             return;
@@ -54,4 +57,4 @@ public class WishListService {
 
         return items;
     }
-}
+        }
