@@ -96,8 +96,7 @@ public class ActivityInfoService {
                 expression = activity.townName
                         .concat(activity.activityName)
                         .concat(activity.doroAddress)
-                        .concat(activity.ownerName)
-                        .concat(activity.ownerTel);
+                        .concat(activity.ownerName);
             } else if (sopt.equals("DIVISION")) {
                 expression = activity.division;
             } else if (sopt.equals("ADDRESS")) {

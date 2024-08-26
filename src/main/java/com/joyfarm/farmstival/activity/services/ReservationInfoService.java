@@ -33,7 +33,7 @@ public class ReservationInfoService {
     private final MemberUtil memberUtil;
 
     /**
-     * 예약 상세 정보
+     * 예약 상세 정보 조회
      * @param seq
      * @return
      */
@@ -57,11 +57,11 @@ public class ReservationInfoService {
         return reservation;
     }
 
+    //예약 목록 조회
     public ListData<Reservation> getList(ReservationSearch search) {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
-
         int offset = (page - 1) * limit;
 
         String sopt = search.getSopt();
@@ -94,19 +94,10 @@ public class ReservationInfoService {
             skey = skey.trim();
             StringExpression expression = null;
             if (sopt.equals("ALL")) { //통합 검색
-                expression = reservation.name.concat(reservation.email)
-                        .concat(reservation.mobile) //숫자만 가지고 검색해야 함->차후 수정
-                        .concat(reservation.townName)
+                expression = reservation.townName
                         .concat(reservation.activityName)
                         .concat(reservation.doroAddress)
-                        .concat(reservation.ownerName)
-                        .concat(reservation.ownerTel);
-            } else if (sopt.equals("NAME")) {
-                expression = reservation.name.concat(reservation.ownerName);
-            } else if (sopt.equals("EMAIL")) {
-                expression = reservation.email;
-            } else if (sopt.equals("MOBILE")) {
-                expression = reservation.mobile.concat(reservation.ownerTel);
+                        .concat(reservation.ownerName);
             } else if (sopt.equals("ADDRESS")) {
                 expression = reservation.doroAddress;
             } else if (sopt.equals("ACTIVITY")) {
@@ -144,8 +135,7 @@ public class ReservationInfoService {
         
         long total = reservationRepository.count(andBuilder);
 
-        //페이징 적용
-        //int page, int total, int ranges, int limit, HttpServletRequest request
+        //pagination 객체 생성
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
         return new ListData<>(items, pagination);
