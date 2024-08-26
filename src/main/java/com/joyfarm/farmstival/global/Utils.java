@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -139,5 +140,17 @@ public class Utils { // 빈의 이름 - utils
             else if (sido.equals("제주")) sido2 = "제주특별자치도";
         }
         return StringUtils.hasText(sido2) ? sido2 : sido;
+    }
+
+    /**
+     * 비회원을 구분하는 Unique ID
+     *   IP + User-Agent
+     * @return
+     */
+    public int guestUid() {
+        String ip = request.getRemoteAddr();
+        String ua = request.getHeader("User-Agent");
+
+        return Objects.hash(ip, ua);
     }
 }
