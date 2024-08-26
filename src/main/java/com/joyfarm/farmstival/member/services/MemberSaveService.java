@@ -68,4 +68,22 @@ public class MemberSaveService {
         }
         // 권한 추가, 수정 E
     }
+
+    /*
+    public void updateMember(Member member, RequestUpdate form) {
+        if (form.getEmail() != null) {
+            member.setEmail(form.getEmail());
+        }
+        if (form.getPassword() != null) {
+            member.setPassword(form.getPassword()); // 비밀번호는 암호화하여 저장해야 함
+        }
+        if (form.getUserName() != null) {
+            member.setUserName(form.getUserName());
+        }
+        if (form.getMobile() != null) {
+            member.setMobile(form.getMobile());
+        }
+
+        memberRepository.save(member); // 업데이트된 회원 정보를 저장
+    }*/
 }

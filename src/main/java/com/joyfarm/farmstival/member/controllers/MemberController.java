@@ -26,6 +26,7 @@ public class MemberController {
 
     private final JoinValidator joinValidator;
     private final MemberSaveService saveService;
+    //private final MemberInfo memberInfo;
     private final Utils utils;
     private final TokenProvider tokenProvider;
 
@@ -76,4 +77,17 @@ public class MemberController {
     public void adminOnly() {
         log.info("관리자 전용!");
     }
+    /*
+    @PutMapping("/update")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity update(@RequestBody @Valid RequestUpdate form, Errors errors, @AuthenticationPrincipal MemberInfo memberInfo) {
+        if (errors.hasErrors()) {
+            throw new BadRequestException(utils.getErrorMessages(errors));
+        }
+
+        Member member = memberInfo.getMember();
+        saveService.updateMember(member, form);
+
+        return ResponseEntity.ok().build();
+    }*/
 }
