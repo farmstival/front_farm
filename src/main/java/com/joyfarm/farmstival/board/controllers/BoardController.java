@@ -3,10 +3,8 @@ package com.joyfarm.farmstival.board.controllers;
 import com.joyfarm.farmstival.board.entities.Board;
 import com.joyfarm.farmstival.board.entities.BoardData;
 import com.joyfarm.farmstival.board.exceptions.BoardNotFoundException;
-import com.joyfarm.farmstival.board.services.BoardConfigInfoService;
-import com.joyfarm.farmstival.board.services.BoardDeleteService;
-import com.joyfarm.farmstival.board.services.BoardInfoService;
-import com.joyfarm.farmstival.board.services.BoardSaveService;
+import com.joyfarm.farmstival.board.services.*;
+import com.joyfarm.farmstival.board.services.comment.CommentInfoService;
 import com.joyfarm.farmstival.board.validators.BoardValidator;
 import com.joyfarm.farmstival.global.CommonSearch;
 import com.joyfarm.farmstival.global.ListData;
@@ -29,9 +27,11 @@ public class BoardController {
     private final BoardInfoService infoService;
     private final BoardSaveService saveService;
     private final BoardDeleteService deleteService;
+    private final BoardViewCountService viewCountService;
+    private final CommentInfoService commentInfoService;
     private final BoardValidator validator;
     private final Utils utils;
-    
+
     // 게시판 설정
     @GetMapping("/config/{bid}")
     public JSONData getConfig(@PathVariable("bid") String bid) {
@@ -41,7 +41,7 @@ public class BoardController {
         return new JSONData(board);
     }
 
-    // 글 작성
+    // 글쓰기
     @PostMapping("/write/{bid}")
     public ResponseEntity<JSONData> write(@PathVariable("bid") String bid, @RequestBody @Valid RequestBoard form, Errors errors) {
         form.setBid(bid);
@@ -69,6 +69,8 @@ public class BoardController {
         }
 
         BoardData data = saveService.save(form);
+        data.setComments(null);
+        data.setBoard(null);
 
         JSONData jsonData = new JSONData(data);
         HttpStatus status = HttpStatus.CREATED;
@@ -80,6 +82,8 @@ public class BoardController {
     @GetMapping("/info/{seq}")
     public JSONData info(@PathVariable("seq") Long seq) {
         BoardData item = infoService.get(seq);
+
+        viewCountService.update(seq); // 조회수 카운트
 
         return new JSONData(item);
     }
@@ -102,6 +106,7 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     public JSONData wishList(CommonSearch search) {
         ListData<BoardData> data = infoService.getWishList(search);
+
         return new JSONData(data);
     }
 }
