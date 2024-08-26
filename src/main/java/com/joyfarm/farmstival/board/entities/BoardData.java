@@ -1,6 +1,5 @@
 package com.joyfarm.farmstival.board.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joyfarm.farmstival.file.entities.FileInfo;
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import com.joyfarm.farmstival.member.entities.Member;
@@ -104,6 +103,5 @@ public class BoardData extends BaseEntity {
     private boolean mine; // 게시글 소유자
 
     @Transient
-    @JsonIgnore
     private List<CommentData> comments; // 댓글 목록
 }
