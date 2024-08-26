@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.board.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.joyfarm.farmstival.global.entities.BaseMemberEntity;
 import com.joyfarm.farmstival.member.constants.Authority;
@@ -102,6 +103,7 @@ public class Board extends BaseMemberEntity {
      *
      * @return
      */
+    @JsonIgnore
     public List<String> getCategories() {
         List<String> categories = new ArrayList<>();
 
