@@ -98,7 +98,6 @@ public class BoardAuthService {
                 throw new UnAuthorizedException();
             }
         } else if (List.of("comment_update", "comment_delete").contains(mode)){
-
             CommentData commentData = commentInfoService.get(seq);
             if (!commentData.isEditable()) {
                 if (commentData.getMember() == null) {
@@ -109,8 +108,6 @@ public class BoardAuthService {
 
                 throw new UnAuthorizedException();
             }
-
-
         }
     }
 
