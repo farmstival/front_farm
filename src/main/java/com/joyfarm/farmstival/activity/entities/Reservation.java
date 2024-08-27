@@ -53,9 +53,9 @@ public class Reservation extends BaseEntity {
     @Column(length = 100)
     private String doroAddress; //도로명 주소
 
-    private Double latitude; //위도
-
-    private Double longitude; //경도
+//    private Double latitude; //위도
+//
+//    private Double longitude; //경도
 
     @Column(length = 40)
     private String ownerName; //대표자명
