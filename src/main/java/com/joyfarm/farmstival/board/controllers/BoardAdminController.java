@@ -47,4 +47,12 @@ public class BoardAdminController {
 
         return new JSONData(item);
     }
+
+    @GetMapping("/edit/{seq}")
+    public JSONData editBoard(@PathVariable("seq") Long seq) {
+        RequestBoard form = boardInfoService.getForm(seq); // getForm을 사용하여 데이터 가져오기
+        return new JSONData(form);
+    }
+
+
 }
