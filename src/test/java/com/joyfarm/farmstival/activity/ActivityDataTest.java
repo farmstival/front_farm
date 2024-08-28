@@ -4,6 +4,7 @@ import com.joyfarm.farmstival.activity.controllers.RequestReservation;
 import com.joyfarm.farmstival.activity.entities.Activity;
 import com.joyfarm.farmstival.activity.entities.Reservation;
 import com.joyfarm.farmstival.activity.services.ActivityInfoService;
+import com.joyfarm.farmstival.activity.services.ReservationApplyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -130,6 +130,7 @@ public class ActivityInfoService {
         Page<Activity> data = activityRepository.findAll(andBuilder, pageable);
 
         //pagination 객체 생성
+        // 페이지번호, 데이터페이지, 페이지 10개씩, limit, request
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
 
         List<Activity> items = data.getContent(); // 갯수에 맞게 조회된 데이터
