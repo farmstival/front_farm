@@ -4,6 +4,7 @@ import com.joyfarm.farmstival.member.MemberUtil;
 import com.joyfarm.farmstival.member.constants.Authority;
 import com.joyfarm.farmstival.member.controllers.RequestJoin;
 import com.joyfarm.farmstival.member.controllers.RequestUpdate;
+import com.joyfarm.farmstival.member.controllers.RequestWithdraw;
 import com.joyfarm.farmstival.member.entities.Authorities;
 import com.joyfarm.farmstival.member.entities.Member;
 import com.joyfarm.farmstival.member.repositories.AuthoritiesRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,5 +91,18 @@ public class MemberSaveService {
 
         save(member, null);
 
+    }
+
+    public void withdraw(RequestWithdraw form){
+        Member member = memberUtil.getMember();
+
+        if(memberUtil.isLogin()){
+            //member.setDeletedAt(LocalDateTime.now());
+            form.setDeletedAt(LocalDateTime.now());
+        }
+
+        save(member, null);
+        // null이면 원래 권한 그대로 가는건가?
+        // -> authority에 비회원 (GUEST) 추가해야 하나...? ㅜㅜ
     }
 }
