@@ -15,7 +15,8 @@ public enum Status {
     public String getTitle() {
         return title;
     }
-    
+
+    //관리자가 사용할 상태 목록 반환
     public static List<String[]> getList() {
         return List.of(
                 new String[]{APPLY.name(), APPLY.title},
