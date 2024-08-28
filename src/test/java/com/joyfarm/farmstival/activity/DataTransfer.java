@@ -44,7 +44,7 @@ public class DataTransfer {
                         .sido(d.get("시도명"))
                         .sigungu(d.get("시군구명"))
                         .division(d.get("체험프로그램구분"))
-                        .activityName(d.get("체험프로그램명"))
+                        .activityName(d.get("체험프로그램명").trim().replace("+", ", "))
                         .facilityInfo(d.get("보유시설정보"))
                         .townArea(d.get("체험휴양마을면적"))
                         .townImage(d.get("체험휴양마을사진"))
