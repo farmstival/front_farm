@@ -5,7 +5,7 @@ spring:
   cloud:
     config:
       uri: ${configServerUrl}
-#
+
 #cors:
 #  allow:
 #    origins: http://localhost:3000

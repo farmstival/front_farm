@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.activity.services;
 
+import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.activity.controllers.ReservationSearch;
 import com.joyfarm.farmstival.activity.entities.QReservation;
 import com.joyfarm.farmstival.activity.entities.Reservation;
@@ -7,6 +8,7 @@ import com.joyfarm.farmstival.activity.exceptions.ReservationNotFoundException;
 import com.joyfarm.farmstival.activity.repositories.ReservationRepository;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
+import com.joyfarm.farmstival.global.constants.DeleteStatus;
 import com.joyfarm.farmstival.global.exceptions.UnAuthorizedException;
 import com.joyfarm.farmstival.member.MemberUtil;
 import com.joyfarm.farmstival.member.entities.Member;
@@ -119,7 +121,11 @@ public class ReservationInfoService {
         //회원번호 검색 처리
         if (memberSeqs != null && !memberSeqs.isEmpty()) {
             andBuilder.and(reservation.member.seq.in(memberSeqs));
+
+            // 예약 상태가 APPLY인 항목만 포함
+            andBuilder.and(reservation.status.eq(Status.APPLY));
         }
+
 
         //검색 처리 E
 

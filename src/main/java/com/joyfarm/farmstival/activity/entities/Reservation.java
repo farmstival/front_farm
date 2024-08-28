@@ -20,7 +20,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reservation extends BaseEntity {
-    //해당 시점의 데이터를 기록
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq; //자동증감번호

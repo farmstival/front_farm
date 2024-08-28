@@ -44,9 +44,9 @@ public class ReservationController {
     //예약 취소
     @PostMapping("/cancel/{seq}")
     public JSONData cancel(@PathVariable("seq") Long seq) {
-        Reservation item = cancelService.cancel(seq);
+        Reservation reservation = cancelService.cancel(seq);
 
-        return new JSONData(item);
+        return new JSONData(reservation);
     }
 
 

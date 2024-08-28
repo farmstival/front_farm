@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @IdClass(WishListId.class)
 public class WishList extends BaseEntity {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Id
