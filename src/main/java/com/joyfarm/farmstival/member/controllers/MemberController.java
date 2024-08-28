@@ -79,7 +79,7 @@ public class MemberController {
         log.info("관리자 전용!");
     }
 
-    @PutMapping("/upeate")
+    @PutMapping("/update")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity update(@RequestBody @Valid RequestUpdate form, Errors errors) {
 
