@@ -16,11 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardConfigInfoService {
     private final RestTemplate restTemplate;
-    private final Utils utils;
     private final ObjectMapper om;
+    private final Utils utils;
 
     /**
      * 게시판 설정 조회
+     *
      * @param bid
      * @return
      */
