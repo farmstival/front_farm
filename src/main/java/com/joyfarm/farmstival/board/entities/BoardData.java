@@ -1,5 +1,6 @@
 package com.joyfarm.farmstival.board.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.joyfarm.farmstival.file.entities.FileInfo;
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import com.joyfarm.farmstival.member.entities.Member;
@@ -16,6 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Table(indexes = @Index(name="idx_board_data", columnList = "notice DESC, createdAt DESC"))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BoardData extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
