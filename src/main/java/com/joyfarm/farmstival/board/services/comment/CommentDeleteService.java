@@ -20,6 +20,6 @@ public class CommentDeleteService {
         commentDataRepository.delete(data);
         commentDataRepository.flush();
 
-        return boardDataSeq;
+        return boardDataSeq; // 게시글 번호를 가지고 와서 반환한다.
     }
 }

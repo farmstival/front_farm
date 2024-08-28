@@ -26,6 +26,7 @@ public class MemberSaveService {
     private final AuthoritiesRepository authoritiesRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberUtil memberUtil;
+
     /**
      * 회원 가입 처리
      *
@@ -70,7 +71,6 @@ public class MemberSaveService {
         }
         // 권한 추가, 수정 E
     }
-
 
     public void updateMember(RequestUpdate form) {
 

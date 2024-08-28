@@ -64,7 +64,7 @@ public class MemberController {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
             String token = tokenProvider.createToken(form.getEmail(), form.getPassword());
-        
+
         return new JSONData(token); // 이상이 없으면 JSONData로 토큰 발급
     }
 
@@ -79,8 +79,7 @@ public class MemberController {
         log.info("관리자 전용!");
     }
 
-
-    @PutMapping("/update")
+    @PutMapping("/upeate")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity update(@RequestBody @Valid RequestUpdate form, Errors errors) {
 
