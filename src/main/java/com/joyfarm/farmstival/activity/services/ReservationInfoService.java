@@ -1,6 +1,5 @@
 package com.joyfarm.farmstival.activity.services;
 
-import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.activity.controllers.ReservationSearch;
 import com.joyfarm.farmstival.activity.entities.QReservation;
 import com.joyfarm.farmstival.activity.entities.Reservation;
@@ -8,7 +7,6 @@ import com.joyfarm.farmstival.activity.exceptions.ReservationNotFoundException;
 import com.joyfarm.farmstival.activity.repositories.ReservationRepository;
 import com.joyfarm.farmstival.global.ListData;
 import com.joyfarm.farmstival.global.Pagination;
-import com.joyfarm.farmstival.global.constants.DeleteStatus;
 import com.joyfarm.farmstival.global.exceptions.UnAuthorizedException;
 import com.joyfarm.farmstival.member.MemberUtil;
 import com.joyfarm.farmstival.member.entities.Member;
@@ -64,6 +62,7 @@ public class ReservationInfoService {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
+
         int offset = (page - 1) * limit;
 
         String sopt = search.getSopt();
@@ -73,11 +72,11 @@ public class ReservationInfoService {
         LocalDate eDate = search.getEDate();
 
         List<Long> memberSeqs = search.getMemberSeqs(); //회원번호로 조회(본인의 예약 정보만 조회)
-
+        
         //검색 처리 S
         QReservation reservation = QReservation.reservation;
         BooleanBuilder andBuilder = new BooleanBuilder();
-
+        
         sopt = sopt != null && StringUtils.hasText(sopt.trim()) ? sopt.trim() : "ALL"; //통합 검색
         if (skey != null && StringUtils.hasText(skey.trim())) {
             /**
@@ -92,7 +91,7 @@ public class ReservationInfoService {
              *  ADDRESS
              *  ACTIVITY - 체험마을명 + 체험 프로그램명
              */
-
+            
             skey = skey.trim();
             StringExpression expression = null;
             if (sopt.equals("ALL")) { //통합 검색
@@ -108,11 +107,11 @@ public class ReservationInfoService {
                 andBuilder.and(expression.contains(skey)); //포함 조건
             }
         }
-
+        
         //예약일 검색
         if (sDate != null) { //예약 시작일 검색
             andBuilder.and(reservation.rDate.goe(sDate)); //시작일보다 크거나 같다
-
+            
         }
         if (eDate != null) { //예약 종료일 검색
             andBuilder.and(reservation.rDate.loe(eDate)); //종료일보다 작거나 같다
@@ -121,14 +120,10 @@ public class ReservationInfoService {
         //회원번호 검색 처리
         if (memberSeqs != null && !memberSeqs.isEmpty()) {
             andBuilder.and(reservation.member.seq.in(memberSeqs));
-
-            // 예약 상태가 APPLY인 항목만 포함
-            andBuilder.and(reservation.status.eq(Status.APPLY));
         }
 
-
         //검색 처리 E
-
+        
         //목록 데이터 가져오기
         List<Reservation> items = queryFactory.selectFrom(reservation)
                 .leftJoin(reservation.member) //시점 데이터가 있기 때문에 필요할 때 활동 데이터를 불러오기로 함
@@ -138,7 +133,7 @@ public class ReservationInfoService {
                 .limit(limit)
                 .orderBy(reservation.createdAt.desc()) //예약 등록일자 기준 정렬
                 .fetch();
-
+        
         long total = reservationRepository.count(andBuilder);
 
         //pagination 객체 생성

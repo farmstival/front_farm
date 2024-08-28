@@ -49,6 +49,7 @@ public class SecurityConfig {
                                     "/reservation/**",
                                     "/myreservation/**",
                                     "/board/**",
+                                    "/comment/**",
                                     "/file/**",
                                     "/upload/**",
                                     "/activity/**"

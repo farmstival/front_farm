@@ -44,9 +44,9 @@ public class ReservationController {
     //예약 취소
     @PostMapping("/cancel/{seq}")
     public JSONData cancel(@PathVariable("seq") Long seq) {
-        Reservation reservation = cancelService.cancel(seq);
+        Reservation item = cancelService.cancel(seq);
 
-        return new JSONData(reservation);
+        return new JSONData(item);
     }
 
 
@@ -60,7 +60,7 @@ public class ReservationController {
 
         return new JSONData(data);
     }
-
+    
     @GetMapping("/admin/info/{seq}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public JSONData adminInfo(@PathVariable("seq") Long seq) {
