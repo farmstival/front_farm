@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 @Table(indexes = @Index(name="idx_board_data", columnList = "notice DESC, createdAt DESC"))
 public class BoardData extends BaseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Column(length=65, nullable = false, updatable = false)

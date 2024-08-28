@@ -49,6 +49,7 @@ public class SecurityConfig {
                                     "/reservation/**",
                                     "/myreservation/**",
                                     "/board/**",
+                                    "/comment/**",
                                     "/file/**",
                                     "/upload/**"
                             ).permitAll() // 회원가입, 로그인(토큰)은 모든 접근 가능
