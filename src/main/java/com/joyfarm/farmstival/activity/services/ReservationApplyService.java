@@ -11,6 +11,7 @@ import com.joyfarm.farmstival.activity.repositories.ReservationRepository;
 import com.joyfarm.farmstival.member.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -21,6 +22,7 @@ public class ReservationApplyService {
     private final ReservationStatusService statusService;
     private final MemberUtil memberUtil;
 
+    @Transactional
     public Reservation apply(RequestReservation form) {
         Long activitySeq = form.getActivitySeq();
         Activity activity = activityRepository.findById(activitySeq).orElseThrow(ActivityNotFoundException::new);
@@ -39,8 +41,6 @@ public class ReservationApplyService {
                 .activityName(activity.getActivityName())
                 .townName(activity.getTownName())
                 .doroAddress(activity.getDoroAddress())
-//                .latitude(activity.getLatitude())
-//                .longitude(activity.getLongitude())
                 .ownerName(activity.getOwnerName())
                 .ownerTel(activity.getOwnerTel())
                 .rDate(form.getRDate())
@@ -51,8 +51,8 @@ public class ReservationApplyService {
         reservationRepository.saveAndFlush(reservation);
 
 
-        //예약 상태로 변경
-        statusService.change(reservation.getSeq(), Status.APPLY);
+        //예약 상태로 변경, 일단 안씀 추후에 사용할지도
+//        statusService.change(reservation.getSeq(), Status.APPLY);
 
         return reservation;
     }

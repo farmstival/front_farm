@@ -2,10 +2,7 @@ package com.joyfarm.farmstival.activity.entities;
 
 import com.joyfarm.farmstival.global.entities.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Activity extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Column(length=150, nullable=false)
