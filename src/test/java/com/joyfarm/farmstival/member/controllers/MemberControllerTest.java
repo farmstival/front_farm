@@ -45,6 +45,7 @@ public class MemberControllerTest {
         form.setMobile("010-1000-1000");
         form.setUserName("사용자01");
         form.setAgree(true);
+
         saveService.save(form);
     }
 
@@ -59,7 +60,7 @@ public class MemberControllerTest {
         //form.setMobile("010-1000-1000");
         //form.setAgree(true);
 
-        String params = om.writeValueAsString(form); // JSON 문자열로 변환!
+        String params = om.writeValueAsString(form); //JSON 문자열로 변환!
 
         mockMvc.perform(post("/account")
                         .contentType(MediaType.APPLICATION_JSON)
