@@ -90,6 +90,21 @@ public class FestivalInfoService {
             }
         }
 
+        /* 정렬 처리 S -> 추가중 ... ING...
+        String sort = search.getSopt();
+
+        PathBuilder<Festival> pathBuilder = new PathBuilder<>(Festival.class, "festival");
+        OrderSpecifier orderSpecifier = null;
+        Order order = Order.DESC;
+        if(sort != null && StringUtils.hasText(sort.trim())){
+            String[] _sort = sort.split("_");
+            if(_sort[1].toUpperCase().equals("ASC")){
+                order = Order.ASC;
+            }
+
+            orderSpecifier = new OrderSpecifier(order, pathBuilder.get(_sort[0]));
+        }*/
+
         // 페이징 및 정렬 처리
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
 
