@@ -35,7 +35,7 @@ public class TourPlaceController {
      * @param seq
      * @return
      */
-    
+
     @GetMapping("/info/{seq}")
     public JSONData info(@PathVariable("seq") Long seq) {
         TourPlace item = infoService.get(seq);

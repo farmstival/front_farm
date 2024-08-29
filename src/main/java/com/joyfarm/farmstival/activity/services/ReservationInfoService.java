@@ -1,6 +1,5 @@
 package com.joyfarm.farmstival.activity.services;
 
-import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.activity.controllers.ReservationSearch;
 import com.joyfarm.farmstival.activity.entities.QReservation;
 import com.joyfarm.farmstival.activity.entities.Reservation;
@@ -63,6 +62,7 @@ public class ReservationInfoService {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;
+
         int offset = (page - 1) * limit;
 
         String sopt = search.getSopt();
@@ -120,8 +120,6 @@ public class ReservationInfoService {
         //회원번호 검색 처리
         if (memberSeqs != null && !memberSeqs.isEmpty()) {
             andBuilder.and(reservation.member.seq.in(memberSeqs));
-
-            andBuilder.and(reservation.status.eq(Status.APPLY));
         }
 
         //검색 처리 E
