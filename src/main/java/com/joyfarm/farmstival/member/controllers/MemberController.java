@@ -96,9 +96,9 @@ public class MemberController {
 
     @PatchMapping("/withdraw")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity withdraw(@RequestBody RequestWithdraw form){
+    public ResponseEntity<Void> withdraw(){
 
-        saveService.withdraw(form);
+        saveService.withdraw();
 
         return ResponseEntity.ok().build();
 
