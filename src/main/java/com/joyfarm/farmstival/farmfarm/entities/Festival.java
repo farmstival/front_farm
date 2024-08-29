@@ -15,20 +15,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Festival extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
-
-    @Column(length=20)
-    private String cat1;
-
-    @Column(length=20)
-    private String cat2;
-
-    @Column(length=20)
-    private String cat3;
+    @Id
+    private Long seq; // 기본키 - contentId
 
     @Column(length=150, nullable = false)
     private String title; // 축제명
+
+    @Column(length=20)
+    private String cat1; // 분류명
+
+    @Column(length=20)
+    private String cat2; // 분류명
+
+    @Column(length=20)
+    private String cat3; // 분류명
 
     private Double latitude; // 위도
     private Double longitude; // 경도
@@ -39,25 +39,24 @@ public class Festival extends BaseEntity {
     @Column(length=150)
     private String address; // 주소
 
-    private String photoUrl1;
-
+    private String photoUrl1; // 사진
     private String photoUrl2;
 
-    @Column
+    @Column(length=150)
     private String location; // 개최 장소
 
     @Lob
     private String content; // 축제 내용
 
-    @Column
+    @Column(length=150)
     private String hostMain; // 주최 기관
 
-    @Column
+    @Column(length=150)
     private String hostSub; // 주관 기관
 
     private LocalDate startDate; // 축제 시작일
     private LocalDate endDate; // 축제 종료일
 
-    @Column
+    @Column(length=150)
     private String pageLink; // 홈페이지 주소
 }
