@@ -11,4 +11,10 @@ public class RequestLogin {
 
     @NotBlank
     private String password;
+
+    private boolean success = true;
+    private String code;
+    private String defaultMessage;
+
+    private String redirectUrl;
 }

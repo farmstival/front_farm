@@ -30,6 +30,11 @@ public class MemberInfoService implements UserDetailsService {
         Member member = memberRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username)); //회원 없을 경우 예외 발생
 
+        /* 로그인 막는 코드
+        if(member.getDeletedAt() == null){
+            throw new UsernameNotFoundException(username + "님은 탈퇴한 회원입니다.");
+        }*/
+
         /*
         MemberInfo쪽에 getAuthorities()메서드를 통해서 사용자 권한 조회,
         권한이 null이거나 비어있을 때 대체 할 기본권한 -> USER, null이 아닌 경우 기존 권한 그대로 반환
