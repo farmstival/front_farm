@@ -94,6 +94,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    //회원 탈퇴
     @PatchMapping("/withdraw")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> withdraw(){
