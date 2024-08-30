@@ -101,7 +101,5 @@ public class MemberSaveService {
         }
 
         save(member, null);
-        // null이면 원래 권한 그대로 가는건가?
-        // -> authority에 비회원 (GUEST) 추가해야 하나...? ㅜㅜ
     }
 }
