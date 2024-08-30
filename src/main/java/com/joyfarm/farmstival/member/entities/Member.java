@@ -37,5 +37,5 @@ public class Member extends BaseEntity {
     private List<Authorities> authorities;
 
     @Transient
-    private FileInfo profileImage;
+    private FileInfo profileImage; //프로필이미지
 }
