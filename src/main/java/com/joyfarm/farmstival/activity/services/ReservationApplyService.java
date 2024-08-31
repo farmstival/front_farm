@@ -50,7 +50,6 @@ public class ReservationApplyService {
 
         reservationRepository.saveAndFlush(reservation);
 
-
         //예약 상태로 변경
         statusService.change(reservation.getSeq(), Status.APPLY);
 

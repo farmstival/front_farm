@@ -1,7 +1,5 @@
 package com.joyfarm.farmstival.activity.services;
 
-import com.joyfarm.farmstival.activity.constants.AM_PM;
-import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.activity.controllers.ReservationSearch;
 import com.joyfarm.farmstival.activity.entities.Activity;
 import com.joyfarm.farmstival.activity.entities.QReservation;
@@ -18,12 +16,14 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -115,16 +115,15 @@ public class ReservationInfoService {
                 expression = reservation.doroAddress;
             } else if (sopt.equals("ACTIVITY")) {
                 expression = reservation.activityName.concat(reservation.townName);
-            }
-            if (expression != null) {
+            } if (expression != null) {
                 andBuilder.and(expression.contains(skey)); //포함 조건
             }
         }
-
+        
         //예약일 검색
         if (sDate != null) { //예약 시작일 검색
             andBuilder.and(reservation.rDate.goe(sDate)); //시작일보다 크거나 같다
-
+            
         }
         if (eDate != null) { //예약 종료일 검색
             andBuilder.and(reservation.rDate.loe(eDate)); //종료일보다 작거나 같다
@@ -136,7 +135,7 @@ public class ReservationInfoService {
         }
 
         //검색 처리 E
-
+        
         //목록 데이터 가져오기
         List<Reservation> items = queryFactory.selectFrom(reservation)
                 .leftJoin(reservation.member) //시점 데이터가 있기 때문에 필요할 때 활동 데이터를 불러오기로 함
@@ -146,7 +145,7 @@ public class ReservationInfoService {
                 .limit(limit)
                 .orderBy(reservation.createdAt.desc()) //예약 등록일자 기준 정렬
                 .fetch();
-
+        
         long total = reservationRepository.count(andBuilder);
 
         //pagination 객체 생성
@@ -176,6 +175,7 @@ public class ReservationInfoService {
             return amPm;
         }
 
+
         for (Reservation item : items) {
             AM_PM ap = item.getAmpm();
             if (ap == AM_PM.AM) { // 오전이 예약된 경우
@@ -195,4 +195,5 @@ public class ReservationInfoService {
     private void addInfo(Reservation reservation) {
 
     }
+
 }
