@@ -4,7 +4,6 @@ import com.joyfarm.farmstival.member.MemberUtil;
 import com.joyfarm.farmstival.member.constants.Authority;
 import com.joyfarm.farmstival.member.controllers.RequestJoin;
 import com.joyfarm.farmstival.member.controllers.RequestUpdate;
-import com.joyfarm.farmstival.member.controllers.RequestWithdraw;
 import com.joyfarm.farmstival.member.entities.Authorities;
 import com.joyfarm.farmstival.member.entities.Member;
 import com.joyfarm.farmstival.member.repositories.AuthoritiesRepository;
@@ -93,16 +92,14 @@ public class MemberSaveService {
 
     }
 
-    public void withdraw(RequestWithdraw form){
+    public void withdraw(){
         Member member = memberUtil.getMember();
 
         if(memberUtil.isLogin()){
             //member.setDeletedAt(LocalDateTime.now());
-            form.setDeletedAt(LocalDateTime.now());
+            member.setDeletedAt(LocalDateTime.now());
         }
 
         save(member, null);
-        // null이면 원래 권한 그대로 가는건가?
-        // -> authority에 비회원 (GUEST) 추가해야 하나...? ㅜㅜ
     }
 }
