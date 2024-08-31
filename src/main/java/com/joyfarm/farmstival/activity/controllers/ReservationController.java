@@ -1,14 +1,20 @@
 package com.joyfarm.farmstival.activity.controllers;
 
+import com.joyfarm.farmstival.activity.constants.Status;
 import com.joyfarm.farmstival.activity.entities.Reservation;
 import com.joyfarm.farmstival.activity.services.ReservationCancelService;
 import com.joyfarm.farmstival.activity.services.ReservationInfoService;
+import com.joyfarm.farmstival.activity.services.ReservationStatusService;
 import com.joyfarm.farmstival.global.ListData;
+import com.joyfarm.farmstival.global.Utils;
+import com.joyfarm.farmstival.global.exceptions.BadRequestException;
 import com.joyfarm.farmstival.global.rests.JSONData;
 import com.joyfarm.farmstival.member.MemberUtil;
 import com.joyfarm.farmstival.member.entities.Member;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +27,9 @@ public class ReservationController {
 
     private final ReservationInfoService infoService;
     private final ReservationCancelService cancelService;
+    private final ReservationStatusService statusService;
     private final MemberUtil memberUtil;
+    private final Utils utils;
 
     @GetMapping("/list") //예약은 회원가입한 멤버만 예약 조회 가능 -> 회원이 아니면 404
     public JSONData list(ReservationSearch search) {
@@ -54,7 +62,7 @@ public class ReservationController {
     //관리자가 조회할 때
     @GetMapping("/admin/list")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public JSONData adminlist(@ModelAttribute ReservationSearch search) {
+    public JSONData adminlist(ReservationSearch search) {
 
         ListData<Reservation> data = infoService.getList(search);
 
@@ -67,5 +75,14 @@ public class ReservationController {
         Reservation reservation = infoService.get(seq);
 
         return new JSONData(reservation);
+    }
+
+    @PostMapping("/admin/status")
+    @PreAuthorize("hasAnyAuthority(('ADMIN'))")
+    public void adminChangeStatus(@Valid @RequestBody RequestReservationChange form, Errors errors){
+        if(errors.hasErrors()) {
+            throw new BadRequestException(utils.getErrorMessages(errors));
+        }
+        statusService.change(form.getSeq(), Status.valueOf(form.getStatus()));
     }
 }

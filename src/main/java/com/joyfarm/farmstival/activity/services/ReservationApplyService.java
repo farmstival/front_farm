@@ -34,6 +34,7 @@ public class ReservationApplyService {
 
         Reservation reservation = Reservation.builder()
                 .activity(activity)
+                .status(Status.APPLY)
                 .email(form.getEmail())
                 .name(form.getName())
                 .mobile(mobile)

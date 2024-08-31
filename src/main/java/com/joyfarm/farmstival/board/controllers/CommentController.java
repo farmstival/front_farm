@@ -25,12 +25,13 @@ public class CommentController {
     private final CommentValidator validator;
     private final Utils utils;
 
-    @PostMapping
+    @PostMapping("/write")
     public JSONData write(@RequestBody @Valid RequestComment form, Errors errors) {
+
         return save(form, errors);
     }
 
-    @PatchMapping
+    @PatchMapping("/update")
     public  JSONData update(@RequestBody @Valid RequestComment form, Errors errors) {
         return save(form, errors);
     }
@@ -40,6 +41,7 @@ public class CommentController {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
         saveService.save(form);
+        System.out.println("RequestComment: " + form);
 
         List<CommentData> items = infoService.getList(form.getBoardDataSeq());
 
@@ -53,8 +55,8 @@ public class CommentController {
     }
 
     @GetMapping("/list/{bSeq}") // 댓글 목록
-    public JSONData getList(@PathVariable("bSeq") Long bseq) {
-        List<CommentData> items = infoService.getList(bseq);
+    public JSONData getList(@PathVariable("bSeq") Long bSeq) {
+        List<CommentData> items = infoService.getList(bSeq);
 
         return new JSONData(items); // 댓글 목록으로 반환값을 내보낸다.
     }

@@ -9,6 +9,8 @@ public class RequestComment {
 
     private Long seq; // 댓글 등록번호
 
+    private Long bSeq;
+
     private Long boardDataSeq; // 게시글 번호
 
     @NotBlank
