@@ -39,6 +39,7 @@ public class ActivityInfoService {
     private final ActivityRepository activityRepository;
     //private final JPAQueryFactory queryFactory; //infoService 쓰게 되면 순환 참조 발생
     private final WishListService wishListService;
+    private final ReservationInfoService reservationInfoService;
 
     /**
      * 액티비티 상세 조회
@@ -175,10 +176,20 @@ public class ActivityInfoService {
         int hours = LocalTime.now().getHour();
         if (hours > 12) { //오후 시간이면 익일 예약 가능
             startDate = startDate.plusDays(1L);
-            availableDates.put(startDate, new boolean[]{true, true});
+            boolean[] amPm = reservationInfoService.check(startDate, item);
+            if (amPm != null) {
+                availableDates.put(startDate, amPm);
+            }
         } else { //당일 예약
             boolean[] time = hours > 8 ? new boolean[] {false, true} : new boolean[]{true, true};
-            availableDates.put(startDate, time);
+            boolean[] newTime = reservationInfoService.check(startDate, item);
+            if (newTime != null) {
+                if (time[0]) time[0] = newTime[0];
+                if (time[1]) time[1] = newTime[1];
+            }
+            if (time[0] || time[1]) {
+                availableDates.put(startDate, time);
+            }
         }
 
         LocalDate endDate = startDate.plusMonths(1L).minusDays(1L);
@@ -186,7 +197,13 @@ public class ActivityInfoService {
         int days = period.getDays() + 1;
 
         for (int i = 1 ; i <= days; i++) {
-            availableDates.put(startDate.plusDays(i), new boolean[] {true, true});
+            /* 이미 예약이 되어 있느 경우 예약 가능일, 시간 블록 제외 처리 */
+            LocalDate rDate = startDate.plusDays(i);
+            boolean[] amPm = reservationInfoService.check(rDate, item);
+            if (amPm == null) {
+                continue;
+            }
+            availableDates.put(rDate, amPm);
         }
 
         item.setAvailableDates(availableDates);
