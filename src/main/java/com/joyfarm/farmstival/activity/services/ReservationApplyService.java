@@ -51,7 +51,6 @@ public class ReservationApplyService {
         reservationRepository.saveAndFlush(reservation);
 
 
-        //예약 상태로 변경, 일단 안씀 추후에 사용할지도
         statusService.change(reservation.getSeq(), Status.APPLY);
 
         return reservation;
