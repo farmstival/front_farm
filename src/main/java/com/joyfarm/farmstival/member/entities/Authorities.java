@@ -19,7 +19,7 @@ public class Authorities {
     @JsonIgnore
     @ManyToOne(fetch= FetchType.LAZY)
     private Member member;
-//asd
+
     @Id
     @Column(length=20)
     @Enumerated(EnumType.STRING)
